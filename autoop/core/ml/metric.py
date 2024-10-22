@@ -8,18 +8,34 @@ METRICS = [
 ] # add the names (in strings) of the metrics you implement
 
 def get_metric(name: str):
-    # Factory function to get a metric by name.
-    # Return a metric instance given its str name.
-    raise NotImplementedError("To be implemented.")
+    return METRICS_MAP[name]
 
-class Metric(...):
+class Metric(ABC):
     """Base class for all metrics.
     """
-    # your code here
-    # remember: metrics take ground truth and prediction as input and return a real number
 
-    def __call__(self):
-        raise NotImplementedError("To be implemented.")
+    @abstractmethod
+    def __call__(self, ground_truth: list[Any], prediction: list[Any]):
+        pass
 
-# add here concrete implementations of the Metric class
-    
+class MeanSquaredErrorMetric(Metric):
+    """Mean Squared Error metric.
+    """
+
+    def __call__(self, ground_truth: list[float], prediction: list[float]):
+        return np.mean((np.array(ground_truth) - np.array(prediction)) ** 2)
+
+
+class AccuracyMetric(Metric):
+    """Accuracy metric.
+    """
+
+    def __call__(self, ground_truth: list[float], prediction: list[float]):
+        return np.mean(np.array(ground_truth) == np.array(prediction))
+
+
+
+METRICS_MAP = {
+    "mean_squared_error": MeanSquaredErrorMetric(),
+    "accuracy": AccuracyMetric(),
+}
