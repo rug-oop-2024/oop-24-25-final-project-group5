@@ -51,37 +51,37 @@ We take some assumptions to simplify this task:
 The base structure of the assignment is as follows:
 ```
 .
-├── INSTRUCTIONS.md
-├── README.md
-├── app # This is the streamlit app
-│   ├── Welcome.py
-│   ├── core # streamlit app logic
-│   │   └── system.py
-│   └── pages
+|-- INSTRUCTIONS.md
+|-- README.md
+|-- app # This is the streamlit app
+|   |-- Welcome.py
+|   |-- core # streamlit app logic
+|   |   |-- system.py
+|   |-- pages
         ...
-├── assets # Storage to save your examples
-├── autoop # You python library for AutoML
-│   ├── core # core logic of automl
-│   │   ├── database.py
-│   │   ├── ml
-│   │   │   ├── artifact.py
-│   │   │   ├── dataset.py
-│   │   │   ├── feature.py
-│   │   │   ├── metric.py
-│   │   │   ├── model
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── classification
-│   │   │   │   ├── model.py
-│   │   │   │   └── regression
-│   │   │   └── pipeline.py
-│   │   └── storage.py
-│   ├── functional # automl functions
-│   │   ├── feature.py
-│   │   └── preprocessing.py
-│   └── tests # Test you modules
-│       ├── main.py
+|-- assets # Storage to save your examples
+|-- autoop # You python library for AutoML
+|   |-- core # core logic of automl
+|   |   |-- database.py
+|   |   |-- ml
+|   |   |   |-- artifact.py
+|   |   |   |-- dataset.py
+|   |   |   |-- feature.py
+|   |   |   |-- metric.py
+|   |   |   |-- model
+|   |   |   |   |-- __init__.py
+|   |   |   |   |-- classification
+|   |   |   |   |-- model.py
+|   |   |   |   |-- regression
+|   |   |   |-- pipeline.py
+|   |   |-- storage.py
+|   |-- functional # automl functions
+|   |   |-- feature.py
+|   |   |-- preprocessing.py
+|   |-- tests # Test you modules
+|       |-- main.py
         ...
-└── requirements.txt
+|-- requirements.txt
 ```
 Make sure to update the `requirements.txt` regularly.
 ```
