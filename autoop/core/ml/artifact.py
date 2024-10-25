@@ -4,10 +4,13 @@ import base64
 
 class Artifact(BaseModel):
     name: str = Field()
-    asset_path: str = Field()
-    data: bytes = Field()
     version: str = Field()
+    asset_path: str = Field()
+    tags: list = Field(default=[])
+    metadata: dict = Field(default={})
+    data: bytes = Field()
     type: str = Field()
+    id: str = Field(default="")
 
     def read(self) -> bytes:
         """
