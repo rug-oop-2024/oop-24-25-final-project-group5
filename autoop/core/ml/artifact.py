@@ -1,8 +1,11 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 import base64
 
 
 class Artifact(BaseModel):
+    """Artifact object used to store assets
+    containing specific asset information.
+    """
     name: str = Field()
     version: str = Field()
     asset_path: str = Field()
@@ -33,5 +36,9 @@ class Artifact(BaseModel):
 
     @property
     def id(self) -> str:
-        """id getter."""
+        """Asset id getter method.
+
+        Returns:
+            id (str): id={base64(asset_path)}-{version}
+        """
         return f'{base64.b64encode(self.asset_path.encode())}-{self.version}'

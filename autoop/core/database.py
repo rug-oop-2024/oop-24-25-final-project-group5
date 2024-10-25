@@ -50,6 +50,7 @@ class Database():
             None
         """
         if not self._data.get(collection, None):
+            print("not there!")
             return
         if self._data[collection].get(id, None):
             del self._data[collection][id]
