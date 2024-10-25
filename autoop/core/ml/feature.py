@@ -12,6 +12,7 @@ class Feature(BaseModel):
     type: Literal["categorical", "numerical"] = Field()
     
     def __init__(self, name: str, type: Literal["categorical", "numerical"]):
+        super().__init__(name = name, type = type)
         self.name = name
         self.type = type
 
