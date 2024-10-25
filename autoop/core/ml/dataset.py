@@ -1,10 +1,9 @@
 from autoop.core.ml.artifact import Artifact
-from abc import ABC, abstractmethod
 import pandas as pd
 import io
 
-class Dataset(Artifact):
 
+class Dataset(Artifact):
     def __init__(self, *args, **kwargs):
         super().__init__(type="dataset", *args, **kwargs)
 
