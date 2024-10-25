@@ -10,6 +10,6 @@ class Feature(BaseModel):
     """Feature class that describes the type of the feature."""
     name: str = Field()
     type: Literal["categorical", "numerical"] = Field()
-    
+
     def __str__(self):
         return f"Feature {self.name} of type {self.type}"

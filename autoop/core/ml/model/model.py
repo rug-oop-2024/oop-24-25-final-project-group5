@@ -4,6 +4,7 @@ import numpy as np
 from copy import deepcopy
 from typing import Literal
 
+
 class Model(ABC):
     _parameters: dict = {}
     _hyperparameters: dict = {}
@@ -19,7 +20,7 @@ class Model(ABC):
     @property
     def parameters(self) -> dict:
         return deepcopy(self._parameters)
-    
+
     @parameters.setter
     def parameters(self, new_params: dict) -> None:
         self._parameters.update(new_params)
@@ -27,9 +28,7 @@ class Model(ABC):
     @property
     def hyperparameters(self) -> dict:
         return deepcopy(self._hyperparameters)
-    
+
     @hyperparameters.setter
     def hyperparameters(self, new_hyperparams: dict) -> None:
         self._hyperparameters.update(new_hyperparams)
-
-

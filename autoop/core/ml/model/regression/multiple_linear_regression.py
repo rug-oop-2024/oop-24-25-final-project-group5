@@ -49,5 +49,3 @@ class MultipleLinearRegression(Model):
     @property
     def parameters(self):
         return self._parameters
-
-
