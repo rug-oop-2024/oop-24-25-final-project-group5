@@ -11,10 +11,5 @@ class Feature(BaseModel):
     name: str = Field()
     type: Literal["categorical", "numerical"] = Field()
     
-    def __init__(self, name: str, type: Literal["categorical", "numerical"]):
-        super().__init__(name = name, type = type)
-        self.name = name
-        self.type = type
-
     def __str__(self):
         return f"Feature {self.name} of type {self.type}"
