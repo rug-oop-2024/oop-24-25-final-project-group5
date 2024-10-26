@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 
 class DecisionTree(Model):
-    def __init__(self, criterion='gini', max_depth=None, min_samples_split=2):
+    def __init__(self, criterion="gini", max_depth=None, min_samples_split=2):
         super().__init__()
         #initialize with hyperparamters
         self._dt_model = DecisionTreeClassifier(
