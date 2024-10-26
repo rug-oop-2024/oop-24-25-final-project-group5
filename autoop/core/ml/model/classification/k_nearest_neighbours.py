@@ -1,7 +1,5 @@
 from autoop.core.ml.model.model import Model
-
 import numpy as np
-
 from collections import Counter
 from pydantic import field_validator
 
@@ -9,7 +7,7 @@ from pydantic import field_validator
 class KNearestNeighbors(Model):
     def __init__(self, k=3):
         super().__init__()
-        #set k as a hyperparameter
+        #store hyperparameter k
         self.hyperparameters = {"k": k}
         #set observations and ground_truth to None in parameters
         self.parameters = {"observations": None, "ground_truth": None}
@@ -46,3 +44,7 @@ class KNearestNeighbors(Model):
         # Take the most common label and return it to the caller
         most_common = Counter(k_nearest_labels).most_common()
         return most_common[0][0]
+    
+    @property
+    def parameters(self):
+        return self._parameters
