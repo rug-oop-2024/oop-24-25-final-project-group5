@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-
+import io
 from app.core.system import AutoMLSystem
 from autoop.core.ml.dataset import Dataset
 
@@ -17,5 +17,18 @@ automl = AutoMLSystem.get_instance()
 
 datasets = automl.registry.list(type="dataset")
 
-# your code here
 
+# your code here
+def choose_dataset():
+    dataset = st.selectbox("Please choose your dataset:",
+                           options=datasets)
+    if dataset:
+        st.write("You chose the following dataset:")
+
+        bytes = dataset.read()
+        csv = bytes.decode()
+        df = pd.read_csv(io.StringIO(csv))
+        st.dataframe(df)
+
+
+choose_dataset()
