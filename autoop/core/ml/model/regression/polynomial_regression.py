@@ -34,3 +34,7 @@ class PolynomialRegression(Model):
         #use fitted model to predict
         return self._linear_model.predict(X_poly)
 
+    #Allow user to read parameters without modifying them
+    @property
+    def parameters(self):
+        return self._parameters

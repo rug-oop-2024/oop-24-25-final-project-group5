@@ -33,6 +33,7 @@ class RandomForest(Model):
         #make predictions using fitted model
         return self._rf_model.predict(observations)
     
+    #Allow users to read parameters without modifying them
     @property
     def parameters(self):
         return self._parameters

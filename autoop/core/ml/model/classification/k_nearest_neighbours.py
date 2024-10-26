@@ -45,6 +45,7 @@ class KNearestNeighbors(Model):
         most_common = Counter(k_nearest_labels).most_common()
         return most_common[0][0]
     
+    #Allow users to read parameters without modifying them
     @property
     def parameters(self):
         return self._parameters

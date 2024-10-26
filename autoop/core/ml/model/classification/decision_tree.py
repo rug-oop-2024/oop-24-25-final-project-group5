@@ -30,7 +30,7 @@ class DecisionTree(Model):
         #make predictions using fitted model
         return self._dt_model.predict(observations)
     
-    #allow users to read the parameters without modifying them
+    #Allow users to read the parameters without modifying them
     @property
     def parameters(self):
         return self._parameters  

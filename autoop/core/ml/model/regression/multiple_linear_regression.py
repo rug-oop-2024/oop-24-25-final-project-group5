@@ -45,7 +45,7 @@ class MultipleLinearRegression(Model):
 
         return predictions
 
-    # Allow users to read parameters without modifying them
+    #Allow users to read parameters without modifying them
     @property
     def parameters(self):
         return self._parameters

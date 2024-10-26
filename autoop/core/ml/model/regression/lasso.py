@@ -33,3 +33,8 @@ class LassoWrapper(Model):
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         return self._lasso_model.predict(observations)
+    
+    #Allow user to read parameters without modifying them
+    @property
+    def parameters(self):
+        return self._parameters
