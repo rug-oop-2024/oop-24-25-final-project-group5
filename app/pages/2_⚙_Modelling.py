@@ -21,13 +21,14 @@ datasets = automl.registry.list(type="dataset")
 # your code here
 def choose_dataset():
     dataset = st.selectbox("Please choose your dataset:",
-                           options=datasets)
+                           options=datasets,
+                           format_func=lambda dataset: f"{dataset.name} - {dataset.version}")
     if dataset:
         st.write("You chose the following dataset:")
 
         bytes = dataset.read()
         csv = bytes.decode()
-        df = pd.read_csv(io.StringIO(csv))
+        df = pd.read_csv(io.StringIO(csv)).head(100)
         st.dataframe(df)
 
 
