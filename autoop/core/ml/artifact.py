@@ -41,4 +41,4 @@ class Artifact(BaseModel):
         Returns:
             id (str): id={base64(asset_path)}-{version}
         """
-        return f'{base64.b64encode(self.asset_path.encode())}-{self.version}'
+        return f'{base64.b64encode(self.asset_path.encode()).decode()}-{self.version}'
