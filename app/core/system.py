@@ -45,6 +45,23 @@ class ArtifactRegistry():
             artifacts.append(artifact)
         return artifacts
 
+    def list_of_type[T](self, type_class: type[T], list_type: str = None) -> List[T]:
+        entries = self._database.list("artifacts")
+        artifacts = []
+        for id, data in entries:
+            if list_type is not None and data["type"] != list_type:
+                continue
+            artifact = type_class(
+                name=data["name"],
+                version=data["version"],
+                asset_path=data["asset_path"],
+                tags=data["tags"],
+                metadata=data["metadata"],
+                data=self._storage.load(data["asset_path"]),
+            )
+            artifacts.append(artifact)
+        return artifacts
+
     def get(self, artifact_id: str) -> Artifact:
         data = self._database.get("artifacts", artifact_id)
         return Artifact(
