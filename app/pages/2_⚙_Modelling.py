@@ -5,7 +5,7 @@ from app.core.system import AutoMLSystem
 from autoop.core.ml.dataset import Dataset
 
 
-st.set_page_config(page_title="Modelling", page_icon="📈")
+st.set_page_config(page_title="Modelling", page_icon="⚙")
 
 def write_helper_text(text: str):
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
@@ -15,10 +15,8 @@ write_helper_text("In this section, you can design a machine learning pipeline t
 
 automl = AutoMLSystem.get_instance()
 
-datasets = automl.registry.list(type="dataset")
+datasets = automl.registry.list_of_type(type_class=Dataset, list_type="dataset")
 
-
-# your code here
 def choose_dataset():
     dataset = st.selectbox("Please choose your dataset:",
                            options=datasets,
@@ -26,10 +24,12 @@ def choose_dataset():
     if dataset:
         st.write("You chose the following dataset:")
 
-        bytes = dataset.read()
-        csv = bytes.decode()
-        df = pd.read_csv(io.StringIO(csv)).head(100)
-        st.dataframe(df)
+        # Add a slice button
+        if st.button("Slice"):
+            st.session_state["dataset_index"] = datasets.index(dataset)
+            st.switch_page("pages/3_🔪_Slicing.py")
+
+        st.dataframe(dataset.readAsDataFrame())
 
 
 choose_dataset()

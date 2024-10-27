@@ -32,19 +32,19 @@ def upload_dataset(automl: AutoMLSystem):
 
 
 def manage_datasets(automl: AutoMLSystem):
-    datasets = automl.registry.list(type="dataset")
+    datasets = automl.registry.list_of_type(type_class=Dataset, list_type="dataset")
     if datasets:
         st.write("### Datasets in database")
-        datasets_names = [dataset.name for dataset in datasets]
         dataset = st.selectbox(label="Select a dataset to delete:",
-                               options=datasets_names)
+                               options=datasets, 
+                                 format_func=lambda x: f"{x.name} - {x.version}")
         if dataset:
-            dataset = next((d for d in datasets if d.name == dataset))
-            # temp reading fix
-            bytes = dataset.read()
-            csv = bytes.decode()
-            df = pd.read_csv(io.StringIO(csv))
+            df = dataset.readAsDataFrame()
             st.dataframe(df)
+
+            if st.button("Delete dataset"):
+                automl.registry.delete(dataset.id)
+                st.success(f"Dataset {dataset.name} has been deleted!")
     else:
         st.write("No datasets uploaded!")
 
