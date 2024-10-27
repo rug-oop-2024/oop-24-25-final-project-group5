@@ -16,7 +16,7 @@ class Dataset(Artifact):
             version=version,
         )
 
-    def read(self) -> pd.DataFrame:
+    def readAsDataFrame(self) -> pd.DataFrame:
         bytes = super().read()
         csv = bytes.decode()
         return pd.read_csv(io.StringIO(csv))
