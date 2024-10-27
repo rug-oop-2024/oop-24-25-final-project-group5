@@ -88,4 +88,4 @@ class LocalStorage(Storage):
             raise NotFoundError(path)
 
     def _join_path(self, path: str) -> str:
-        return os.path.join(self._base_path, path)
+        return self._base_path+"/"+path
