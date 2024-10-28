@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 import os
-from typing import List, Union
+from typing import List
 from glob import glob
+
 
 class NotFoundError(Exception):
     def __init__(self, path):
         super().__init__(f"Path not found: {path}")
 
-class Storage(ABC):
 
+class Storage(ABC):
     @abstractmethod
     def save(self, data: bytes, path: str):
         """

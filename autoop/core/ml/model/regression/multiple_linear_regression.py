@@ -1,8 +1,5 @@
 from autoop.core.ml.model.model import Model
-
 import numpy as np
-from sklearn.datasets import make_regression
-from sklearn.linear_model import LinearRegression
 
 
 class MultipleLinearRegression(Model):
@@ -44,8 +41,3 @@ class MultipleLinearRegression(Model):
         predictions = np.dot(observations_bias, beta)
 
         return predictions
-
-    #Allow users to read parameters without modifying them
-    @property
-    def parameters(self):
-        return self._parameters

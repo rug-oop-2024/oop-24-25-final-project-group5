@@ -3,13 +3,14 @@ import numpy as np
 from collections import Counter
 from pydantic import field_validator
 
+
 # Inherit from Model
 class KNearestNeighbors(Model):
     def __init__(self, k=3):
         super().__init__()
-        #store hyperparameter k
+        # store hyperparameter k
         self.hyperparameters = {"k": k}
-        #set observations and ground_truth to None in parameters
+        # set observations and ground_truth to None in parameters
         self.parameters = {"observations": None, "ground_truth": None}
 
     # Check that k >= 0
@@ -31,7 +32,7 @@ class KNearestNeighbors(Model):
 
     # Predict a single point
     def _predict_single(self, observation: np.ndarray):
-        #Access k
+        # Access k
         k = self.hyperparameters["k"]
         # Calculate distance between observation and every other point
         distances = np.linalg.norm(self.parameters["observations"]
@@ -44,8 +45,3 @@ class KNearestNeighbors(Model):
         # Take the most common label and return it to the caller
         most_common = Counter(k_nearest_labels).most_common()
         return most_common[0][0]
-    
-    #Allow users to read parameters without modifying them
-    @property
-    def parameters(self):
-        return self._parameters
