@@ -4,10 +4,11 @@ from sklearn.linear_model import Lasso
 
 
 # Inherit from Model
-class LassoWrapper(Model):
+class LassoRegression(Model):
     def __init__(self, alpha=1.0, max_iter=1000,
                  tol=0.0001, selection='cyclic'):
         super().__init__()
+
         # set hyperparameters
         self.hyperparameters = {
             "alpha": alpha,
@@ -15,11 +16,19 @@ class LassoWrapper(Model):
             "tol": tol,
             "selection": selection
         }
+
+        self.hyperparameter_descriptions = {
+            "alpha": "Constant that multiplies the L1 term. Defaults to 1.0.",
+            "max_iter": "The maximum number of iterations. Defaults to 1000.",
+            "tol": "The tolerance for the optimization. Defaults to 0.0001.",
+            "selection": "If set to 'random', a random coefficient is updated every iteration rather than looping over features sequentially. Defaults to 'cyclic'."
+        }
+
         # initialize Lasso model with hyperparameters
         self._lasso_model = Lasso(
             alpha=self.hyperparameters["alpha"],
             max_iter=self.hyperparameters["max_iter"],
-            tol=self.hyperparmeters["tol"],
+            tol=self.hyperparameters["tol"],
             selection=self.hyperparameters["selection"]
         )
 
