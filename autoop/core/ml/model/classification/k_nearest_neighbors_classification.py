@@ -5,13 +5,17 @@ from pydantic import field_validator
 
 
 # Inherit from Model
-class KNearestNeighbors(Model):
+class KNearestNeighborsClassification(Model):
     def __init__(self, k=3):
         super().__init__()
         # store hyperparameter k
         self.hyperparameters = {"k": k}
         # set observations and ground_truth to None in parameters
         self.parameters = {"observations": None, "ground_truth": None}
+
+        self.hyperparameter_descriptions = {
+            "k": "Number of neighbors to consider for classification"
+        }
 
     # Check that k >= 0
     @field_validator("k")
