@@ -9,10 +9,13 @@ class MultipleLinearRegression(Model):
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         # Store observations and ground_truth in parameters
-        self._parameters = {
+        self.parameters = {
             "observations": observations,
             "ground_truth": ground_truth
         }
+
+        self.hyperparameters = {}
+        self.hyperparameter_descriptions = {}
 
         # Add a column of 1 for the intercept
         observations_bias = np.insert(observations, 0, 1, axis=1)
@@ -24,18 +27,18 @@ class MultipleLinearRegression(Model):
         w = np.dot(X_T_X_inv, X_T_y)
 
         # Store the parameters
-        self._parameters["parameters"] = w
+        self.parameters["parameters"] = w
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         # Check if the model has been trained
-        if self._parameters["parameters"] is None:
+        if self.parameters["parameters"] is None:
             print("The model is not trained yet.")
 
         # Add a column of 1 for the intercept
         observations_bias = np.insert(observations, 0, 1, axis=1)
 
         # Read the parameters
-        beta = self._parameters["parameters"]
+        beta = self.parameters["parameters"]
 
         # y = X * w
         predictions = np.dot(observations_bias, beta)
