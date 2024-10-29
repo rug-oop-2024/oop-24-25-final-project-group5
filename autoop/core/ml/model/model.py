@@ -8,6 +8,7 @@ from typing import Literal
 class Model(ABC):
     _parameters: dict = {}
     _hyperparameters: dict = {}
+    _hyperparameter_descriptions: dict = {}
 
     @abstractmethod
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
@@ -31,4 +32,12 @@ class Model(ABC):
 
     @hyperparameters.setter
     def hyperparameters(self, new_hyperparams: dict) -> None:
-        self._hyperparameters.update(new_hyperparams)
+        self._hyperparameters = new_hyperparams
+
+    @property
+    def hyperparameter_descriptions(self) -> dict:
+        return deepcopy(self._hyperparameter_descriptions)
+
+    @hyperparameter_descriptions.setter
+    def hyperparameter_descriptions(self, new_hyperparam_desc: dict) -> None:
+        self._hyperparameter_descriptions = new_hyperparam_desc
