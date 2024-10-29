@@ -3,19 +3,26 @@ import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 
 
-class DecisionTree(Model):
-    def __init__(self, criterion="gini", max_depth=None, min_samples_split=2):
+class DecisionTreeClassification(Model):
+    def __init__(self, criterion="gini", max_depth=-1, min_samples_split=2):
         super().__init__()
         # initialize with hyperparamters
         self._dt_model = DecisionTreeClassifier(
             criterion=criterion,
-            max_depth=max_depth,
+            max_depth=max_depth if max_depth != -1 else None,
             min_samples_split=min_samples_split
         )
-        self._hyperparameters = {
+
+        self.hyperparameters = {
             "criterion": criterion,
             "max_depth": max_depth,
             "min_samples_split": min_samples_split
+        }
+
+        self.hyperparameter_descriptions = {
+            "criterion": "The function to measure the quality of a split. Supported criteria are 'gini' for the Gini impurity and 'entropy' for the information gain.",
+            "max_depth": "The maximum depth of the tree. If None, then nodes are expanded until all leaves are pure or until all leaves contain less than min_samples_split samples.",
+            "min_samples_split": "The minimum number of samples required to split an internal node."
         }
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
