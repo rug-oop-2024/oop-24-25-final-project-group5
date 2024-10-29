@@ -6,9 +6,13 @@ from sklearn.preprocessing import PolynomialFeatures
 
 class PolynomialRegression(Model):
     def __init__(self, degree=2):
-        super().__init()
+        super().__init__()
         # set degree as hyperparameter
         self.hyperparameters = {"degree": degree}
+        self.hyperparameter_descriptions = {
+            "degree": "Degree of polynomial features"
+        }
+        
         # initialize linear regression model
         self._linear_model = LinearRegression()
         # polynomial features
