@@ -28,7 +28,7 @@ class MultipleLinearRegression(Model):
         w = np.dot(X_T_X_inv, X_T_y)
 
         # Store the parameters
-        self.parameters["parameters"] = w
+        self.parameters = {"parameters": w}
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         # Check if the model has been trained

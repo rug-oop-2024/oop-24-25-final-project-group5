@@ -13,7 +13,7 @@ class PolynomialRegression(Model):
             "degree": "Degree of polynomial features"
         }
         self.type = "regression"
-        
+
         # initialize linear regression model
         self._linear_model = LinearRegression()
         # polynomial features
@@ -33,8 +33,8 @@ class PolynomialRegression(Model):
         # fit linear regression model
         self._linear_model.fit(X_poly, ground_truth)
         # store parameters
-        self.parameters["coef_"] = self._linear_model.coef_
-        self.parameters["intercept_"] = self._linear_model.intercept_
+        self.parameters = {"coef_": self._linear_model.coef_}
+        self.parameters = {"intercept_": self._linear_model.intercept_}
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         # transform observations to polynomial features

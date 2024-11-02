@@ -32,12 +32,12 @@ class RandomForestClassification(Model):
         self._rf_model.fit(observations, ground_truth)
 
         # store parameters
-        self.parameters["feature_importances_"] = (
+        self._parameters["feature_importances_"] = (
             self._rf_model.feature_importances_
         )
-        self.parameters["n_classes_"] = self._rf_model.n_classes_
-        self.parameters["n_features_"] = self._rf_model.n_features_in_
-        self.parameters["n_outputs"] = self._rf_model.n_outputs_
+        self._parameters["n_classes_"] = self._rf_model.n_classes_
+        self._parameters["n_features_"] = self._rf_model.n_features_in_
+        self._parameters["n_outputs"] = self._rf_model.n_outputs_
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         # make predictions using fitted model
