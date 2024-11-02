@@ -14,7 +14,7 @@ def preprocess_features(features: List[Feature], dataset: Dataset) -> List[Tuple
         List[str, Tuple[np.ndarray, dict]]: List of preprocessed features. Each ndarray of shape (N, ...)
     """
     results = []
-    raw = dataset.read()
+    raw = dataset.readAsDataFrame()
     for feature in features:
         if feature.type == "categorical":
             encoder = OneHotEncoder()

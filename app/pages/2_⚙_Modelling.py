@@ -8,12 +8,15 @@ from autoop.core.ml.model import *
 
 from autoop.core.ml.feature import Feature
 from autoop.functional.feature import detect_feature_types
+from autoop.core.ml.pipeline import Pipeline
 
 
 st.set_page_config(page_title="Modelling", page_icon="⚙")
 
+
 def write_helper_text(text: str):
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
+
 
 st.write("# ⚙ Modelling")
 write_helper_text("In this section, you can design a machine learning pipeline to train a model on a dataset.")
@@ -21,6 +24,7 @@ write_helper_text("In this section, you can design a machine learning pipeline t
 automl = AutoMLSystem.get_instance()
 
 datasets = automl.registry.list_of_type(type_class=Dataset, list_type="dataset")
+
 
 def choose_dataset() -> Dataset:
     dataset = st.selectbox("Please choose your dataset:",
@@ -87,6 +91,7 @@ def choose_model(feature_type: str) -> Model:
                 st.write(f"Unsupported hyperparameter type: {param_type}")
     return model
 
+
 def choose_metrics(model_type: str) -> list[Metric]:
     metrics = METRICS_MAP
     if model_type == "regression":
@@ -102,6 +107,7 @@ def choose_metrics(model_type: str) -> list[Metric]:
     st.write(f"You chose the following metrics: {metric_name}")
     return [metrics[metric_name] for metric_name in metric_name]
 
+
 def choose_input_features(dataset: Dataset) -> list[Feature]:
     dataset_features = detect_feature_types(dataset)
 
@@ -115,6 +121,7 @@ def choose_input_features(dataset: Dataset) -> list[Feature]:
     st.write(f"You chose the following input features: {feature_name}")
 
     return [feature for feature in dataset_features if feature.name in feature_name]
+
 
 def choose_target_feature(dataset: Dataset) -> Feature:
     dataset_features = detect_feature_types(dataset)
@@ -142,8 +149,21 @@ input_features = choose_input_features(dataset)
 target_feature = choose_target_feature(dataset)
 if input_features and target_feature:
     model = choose_model(target_feature.type)
-    metrics = choose_metrics(model.model_type)
-data_split = choose_data_split()
+    metrics = choose_metrics(model.type)
+    data_split = choose_data_split()
+    if data_split:
+        # create pipeline object
+        modelling_pipeline = Pipeline(
+            metrics,
+            dataset,
+            model,
+            input_features,
+            target_feature,
+            data_split
+        )
 
 if st.button("Train"):
-    pass
+    # no actual implementation, just testing
+    results = modelling_pipeline.execute()
+    print(results["metrics"])
+    print(results["predictions"])

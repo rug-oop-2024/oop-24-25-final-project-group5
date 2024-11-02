@@ -11,7 +11,6 @@ import numpy as np
 
 
 class Pipeline():
-    
     def __init__(self, 
                  metrics: List[Metric],
                  dataset: Dataset, 
