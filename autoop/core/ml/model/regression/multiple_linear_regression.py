@@ -6,6 +6,7 @@ class MultipleLinearRegression(Model):
     def __init__(self):
         # Inherit from Model
         super().__init__()
+        self.model_type = "regression"
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         # Store observations and ground_truth in parameters

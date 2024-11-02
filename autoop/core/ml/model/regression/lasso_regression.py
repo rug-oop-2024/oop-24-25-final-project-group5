@@ -8,6 +8,7 @@ class LassoRegression(Model):
     def __init__(self, alpha=1.0, max_iter=1000,
                  tol=0.0001, selection='cyclic'):
         super().__init__()
+        self.model_type = "regression"
 
         # set hyperparameters
         self.hyperparameters = {

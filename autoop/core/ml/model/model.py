@@ -9,6 +9,7 @@ class Model(ABC):
     _parameters: dict = {}
     _hyperparameters: dict = {}
     _hyperparameter_descriptions: dict = {}
+    model_type: str = ""
 
     @abstractmethod
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:

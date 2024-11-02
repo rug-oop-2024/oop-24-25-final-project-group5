@@ -36,8 +36,8 @@ def manage_datasets(automl: AutoMLSystem):
     if datasets:
         st.write("### Datasets in database")
         dataset = st.selectbox(label="Select a dataset to delete:",
-                               options=datasets, 
-                                 format_func=lambda x: f"{x.name} - {x.version}")
+                               options=datasets,
+                               format_func=lambda x: f"{x.name} - {x.version}")
         if dataset:
             df = dataset.readAsDataFrame()
             st.dataframe(df)

@@ -1,10 +1,8 @@
 import streamlit as st
-import pandas as pd
-import io
 from app.core.system import AutoMLSystem
 from autoop.core.ml.dataset import Dataset
 
-from autoop.core.ml.metric import Metric, METRICS_MAP
+from autoop.core.ml.metric import Metric, METRICS_MAP, METRICS
 
 from autoop.core.ml.model import *
 
@@ -37,14 +35,18 @@ def choose_dataset() -> Dataset:
             st.switch_page("pages/3_🔪_Slicing.py")
 
         st.dataframe(dataset.readAsDataFrame().head(10))
-    
     return dataset
 
-def choose_model() -> Model:
+
+def choose_model(feature_type: str) -> Model:
     models = get_models()
-    model_names = list(models.keys())
-    model_name = st.selectbox("Please choose your model:", options=model_names, 
-        format_func=lambda model_name: f"{model_name} - {models[model_name]}")
+    if feature_type == "categorical":
+        model_names = [model for model in models if models[model] == "classification"]
+    else:
+        model_names = [model for model in models if models[model] == "regression"]
+    model_name = st.selectbox("Please choose your model:",
+                              options=model_names, 
+                              format_func=lambda model_name: f"{model_name} - {models[model_name]}")
 
     if not model_name:
         return None
@@ -54,7 +56,6 @@ def choose_model() -> Model:
     model_type = get_model(model_name)
 
     model = model_type()
-
     # Add hyper parameters
     hyper_params = model.hyperparameters
     hyper_params_desc = model.hyperparameter_descriptions
@@ -62,7 +63,7 @@ def choose_model() -> Model:
     if len(hyper_params) == 0:
         st.write("The model does not have any hyperparameters.")
         return model
-    
+
     st.write("Please choose the hyperparameters for the model:")
 
     hyper_params_selector = st.empty()
@@ -84,11 +85,14 @@ def choose_model() -> Model:
                 hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
             else:
                 st.write(f"Unsupported hyperparameter type: {param_type}")
+    return model
 
-def choose_metrics() -> list[Metric]:
+def choose_metrics(model_type: str) -> list[Metric]:
     metrics = METRICS_MAP
-
-    metric_names = list(metrics.keys())
+    if model_type == "regression":
+        metric_names = METRICS[:3]
+    elif model_type == "classification":
+        metric_names = METRICS[3:]
     metric_name = st.multiselect("Please choose your metrics:", options=metric_names,
         format_func=lambda metric_name: f"{metric_name.replace('_', ' ').capitalize()}")
 
@@ -126,16 +130,19 @@ def choose_target_feature(dataset: Dataset) -> Feature:
 
     return [feature for feature in dataset_features if feature.name == feature_name][0]
 
+
 def choose_data_split() -> float:
     st.write("Please choose the data split ratio: (how much data to use for training)")
     data_split = st.slider("Please choose the data split ratio:", 0.0, 1.0, 0.8, 0.05)
     return data_split
 
+
 dataset = choose_dataset()
-model = choose_model()
-metrics = choose_metrics()
 input_features = choose_input_features(dataset)
 target_feature = choose_target_feature(dataset)
+if input_features and target_feature:
+    model = choose_model(target_feature.type)
+    metrics = choose_metrics(model.model_type)
 data_split = choose_data_split()
 
 if st.button("Train"):

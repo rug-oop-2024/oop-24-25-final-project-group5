@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 class RandomForestClassification(Model):
     def __init__(self, n_estimators=100, max_depth=None, min_samples_split=2):
         super().__init__()
+        self.model_type = "classification"
         # initialize with hyperparameters
         self._rf_model = RandomForestClassifier(
             n_estimators=n_estimators,
