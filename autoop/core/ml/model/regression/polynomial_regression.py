@@ -5,7 +5,7 @@ from sklearn.preprocessing import PolynomialFeatures
 
 
 class PolynomialRegression(Model):
-    def __init__(self, degree=2):
+    def __init__(self, degree=2) -> None:
         super().__init__()
         # set degree as hyperparameter
         self.hyperparameters = {"degree": degree}
@@ -20,11 +20,6 @@ class PolynomialRegression(Model):
         self._poly_features = PolynomialFeatures(
             degree=self.hyperparameters["degree"]
         )
-        # initialize parameters to None
-        self.parameters = {
-            "coef_": None,
-            "intercept_": None
-        }
 
     # fit: transform to polynomial features and train linear regression model
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:

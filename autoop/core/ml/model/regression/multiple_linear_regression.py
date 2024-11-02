@@ -3,7 +3,7 @@ import numpy as np
 
 
 class MultipleLinearRegression(Model):
-    def __init__(self):
+    def __init__(self) -> None:
         # Inherit from Model
         super().__init__()
         self.type = "regression"
@@ -14,9 +14,6 @@ class MultipleLinearRegression(Model):
             "observations": observations,
             "ground_truth": ground_truth
         }
-
-        self.hyperparameters = {}
-        self.hyperparameter_descriptions = {}
 
         # Add a column of 1 for the intercept
         observations_bias = np.insert(observations, 0, 1, axis=1)

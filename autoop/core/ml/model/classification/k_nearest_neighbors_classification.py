@@ -6,7 +6,7 @@ from pydantic import field_validator
 
 # Inherit from Model
 class KNearestNeighborsClassification(Model):
-    def __init__(self, k=3):
+    def __init__(self, k=3) -> None:
         super().__init__()
         self.type = "classification"
         # store hyperparameter k
@@ -31,9 +31,9 @@ class KNearestNeighborsClassification(Model):
             "ground_truth": ground_truth
         }
 
-    def predict(self, observations: np.ndarray):
+    def predict(self, observations: np.ndarray) -> np.ndarray:
         predictions = [self._predict_single(x) for x in observations]
-        return predictions
+        return np.ndarray(predictions)
 
     # Predict a single point
     def _predict_single(self, observation: np.ndarray):
