@@ -8,7 +8,7 @@ from pydantic import field_validator
 class KNearestNeighborsClassification(Model):
     def __init__(self, k=3):
         super().__init__()
-        self.model_type = "classification"
+        self.type = "classification"
         # store hyperparameter k
         self.hyperparameters = {"k": k}
         # set observations and ground_truth to None in parameters

@@ -6,7 +6,7 @@ from sklearn.tree import DecisionTreeClassifier
 class DecisionTreeClassification(Model):
     def __init__(self, criterion="gini", max_depth=-1, min_samples_split=2):
         super().__init__()
-        self.model_type = "classification"
+        self.type = "classification"
         # initialize with hyperparamters
         self._dt_model = DecisionTreeClassifier(
             criterion=criterion,

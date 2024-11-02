@@ -12,7 +12,7 @@ class PolynomialRegression(Model):
         self.hyperparameter_descriptions = {
             "degree": "Degree of polynomial features"
         }
-        self.model_type = "regression"
+        self.type = "regression"
         
         # initialize linear regression model
         self._linear_model = LinearRegression()
