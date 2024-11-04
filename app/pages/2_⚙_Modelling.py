@@ -196,8 +196,13 @@ if __name__ == "__main__":
         st.write("Please create the modelling pipeline first.")
 
     st.divider()
-    if st.button("Train"):
+    if st.button("Train") and modelling_pipeline:
         # no actual implementation, just testing
         results = modelling_pipeline.execute()
         print(results["metrics"])
         print(results["predictions"])
+
+    if st.button("Save Pipeline") and modelling_pipeline:
+        automl = AutoMLSystem.get_instance()
+        print(modelling_pipeline.artifacts)
+        #automl.registry.register(modelling_pipeline.artifacts)

@@ -7,12 +7,12 @@ class Artifact(BaseModel):
     containing specific asset information.
     """
     name: str = Field()
-    version: str = Field()
-    asset_path: str = Field()
+    version: str = Field(default="1.0.0")
+    asset_path: str = Field(default="")
     tags: list = Field(default=[])
     metadata: dict = Field(default={})
     data: bytes = Field()
-    type: str = Field()
+    type: str = Field(default="")
 
     def read(self) -> bytes:
         """Returns objects stored data.
