@@ -19,7 +19,7 @@ def write_helper_text(text: str):
 
 
 st.write("# ⚙ Modelling")
-write_helper_text("In this section, you can design a machine learning pipeline to train a model on a dataset.")
+write_helper_text("In this section, you can design a pipeline to train a model on a dataset.")
 
 automl = AutoMLSystem.get_instance()
 
@@ -102,10 +102,10 @@ def choose_metrics(model_type: str) -> list[Metric]:
         format_func=lambda metric_name: f"{metric_name.replace('_', ' ').capitalize()}")
 
     if not metric_name:
-        return None
+        return None, None
 
     st.write(f"You chose the following metrics: {metric_name}")
-    return [metrics[metric_name] for metric_name in metric_name]
+    return [metrics[metric_name] for metric_name in metric_name], metric_name
 
 
 def choose_input_features(dataset: Dataset) -> list[Feature]:
@@ -144,26 +144,60 @@ def choose_data_split() -> float:
     return data_split
 
 
-dataset = choose_dataset()
-input_features = choose_input_features(dataset)
-target_feature = choose_target_feature(dataset)
-if input_features and target_feature:
-    model = choose_model(target_feature.type)
-    metrics = choose_metrics(model.type)
-    data_split = choose_data_split()
-    if data_split:
-        # create pipeline object
-        modelling_pipeline = Pipeline(
-            metrics,
-            dataset,
-            model,
-            input_features,
-            target_feature,
-            data_split
-        )
+if __name__ == "__main__":
+    # quick workaround :P
+    modelling_pipeline = None
+    dataset = choose_dataset()
+    input_features = choose_input_features(dataset)
+    target_feature = choose_target_feature(dataset)
+    if input_features and target_feature:
+        model = choose_model(target_feature.type)
+        metrics, metric_names = choose_metrics(model.type)
+        data_split = choose_data_split()
+        if data_split:
+            # create pipeline object
+            modelling_pipeline = Pipeline(
+                metrics,
+                dataset,
+                model,
+                input_features,
+                target_feature,
+                data_split
+            )
 
-if st.button("Train"):
-    # no actual implementation, just testing
-    results = modelling_pipeline.execute()
-    print(results["metrics"])
-    print(results["predictions"])
+    st.divider()
+    st.subheader("Pipeline Overview")
+    if modelling_pipeline:
+        st.markdown("### Selected dataset:")
+        st.markdown(f"**Name**: {dataset.name}")
+        st.markdown(f"**Version**: {dataset.version}")
+        if st.button(label="View"):
+            st.dataframe(dataset.readAsDataFrame())
+
+        st.markdown("### Input features:")
+        for feature in input_features:
+            st.markdown(f"{feature.name} (type: {feature.type})")
+
+        st.markdown("### Target features:")
+        st.markdown(f"{target_feature.name} (type: {target_feature.type})")
+
+        st.markdown("### Selected model:")
+        st.markdown(f"Name: {model.__class__.__name__}")
+        st.markdown(f"Type: {model.type.capitalize()}")
+        st.markdown("### Model Hyperparameters:")
+        for hyper_param, value in model.hyperparameters.items():
+            st.markdown(f"**{hyper_param}**: {value}")
+
+        st.markdown("### Model Metrics:")
+        for metric in metric_names:
+            st.write(metric.capitalize())
+
+    else:
+        st.write("Please create the modelling pipeline first.")
+
+    st.divider()
+    if st.button("Train"):
+        # no actual implementation, just testing
+        results = modelling_pipeline.execute()
+        print(results["metrics"])
+        print(results["predictions"])
