@@ -22,8 +22,8 @@ class LassoRegression(Model):
             "alpha": "Constant that multiplies the L1 term. Defaults to 1.0.",
             "max_iter": "The maximum number of iterations. Defaults to 1000.",
             "tol": "The tolerance for the optimization. Defaults to 0.0001.",
-            "selection": "If set to 'random', a random coefficient is"
-                         "updated every iteration rather than looping over"
+            "selection": "If set to 'random', a random coefficient is "
+                         "updated every iteration rather than looping over "
                          "features sequentially. Defaults to 'cyclic'."
         }
 

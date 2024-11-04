@@ -23,12 +23,12 @@ class DecisionTreeClassification(Model):
 
         self.hyperparameter_descriptions = {
             "criterion": "The function to measure the quality of a split."
-                         "Supported criteria are 'gini' for the Gini impurity"
+                         "Supported criteria are 'gini' for the Gini impurity "
                          "and 'entropy' for the information gain.",
             "max_depth": "The maximum depth of the tree. If None, then nodes"
-                         "are expanded until all leaves are pure or until all"
+                         "are expanded until all leaves are pure or until all "
                          "leaves contain less than min_samples_split samples.",
-            "min_samples_split": "The minimum number of samples required to"
+            "min_samples_split": "The minimum number of samples required to "
                                  "split an internal node."
         }
 

@@ -25,7 +25,7 @@ class RandomForestClassification(Model):
         self.hyperparameter_descriptions = {
             "n_estimators": "The number of trees in the forest.",
             "max_depth": "The maximum depth of the tree.",
-            "min_samples_split": "The minimum number of samples required"
+            "min_samples_split": "The minimum number of samples required "
                                  "to split an internal node."
         }
 
