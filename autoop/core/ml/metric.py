@@ -147,21 +147,9 @@ class PrecisionMetric(Metric):
         ground_truth = np.array(ground_truth)
         prediction = np.array(prediction)
 
-        uniques = np.unique(ground_truth)
-        precision_per_class = []
-        for cls in uniques:
-            true_positive = np.sum((ground_truth == cls) & (prediction == cls))
-            false_positive = np.sum((
-                ground_truth != cls) & (prediction == cls)
-            )
-            precision_per_class.append(
-                (true_positive / (true_positive + false_positive))
-            )
-
-        if average == "micro":
-            return np.sum((ground_truth == prediction)) / len(ground_truth)
-        elif average == "macro":
-            return np.mean(precision_per_class)
+        true_positive = np.sum((ground_truth == 1) & (prediction == 1))
+        false_positive = np.sum((ground_truth == 0) & (prediction == 1))
+        return true_positive / (true_positive + false_positive)
 
 
 class RecallMetric(Metric):
@@ -182,24 +170,9 @@ class RecallMetric(Metric):
         Returns:
             float: calculated recall score
         """
-        ground_truth = np.array(ground_truth)
-        prediction = np.array(prediction)
-
-        uniques = np.unique(ground_truth)
-        recall_per_class = []
-        for cls in uniques:
-            true_positive = np.sum((ground_truth == cls) & (prediction == cls))
-            false_negative = np.sum(
-                (ground_truth == cls) & (prediction != cls)
-            )
-            recall_per_class.append(
-                (true_positive / (true_positive + false_negative))
-            )
-
-        if average == "micro":
-            return np.sum((ground_truth == prediction)) / len(ground_truth)
-        elif average == "macro":
-            return np.mean(recall_per_class)
+        true_positive = np.sum((ground_truth == 1) & (prediction == 1))
+        false_negative = np.sum((ground_truth == 1) & (prediction == 0))
+        return true_positive / (true_positive + false_negative)
 
 
 class F1Score(Metric):
@@ -222,22 +195,8 @@ class F1Score(Metric):
         """
         ground_truth = np.array(ground_truth)
         prediction = np.array(prediction)
-        uniques = np.unique(ground_truth)
-        f1_per_class = []
-        if average == 'macro':
-            for cls in uniques:
-                tp = np.sum((ground_truth == cls) & (prediction == cls))
-                fp = np.sum((ground_truth != cls) & (prediction == cls))
-                fn = np.sum((ground_truth == cls) & (prediction != cls))
-                precision = tp / (tp + fp)
-                recall = tp / (fp + fn)
-                f1 = (2 * (precision * recall)) / (precision + recall)
-                f1_per_class.append(f1)
-            return np.mean(f1_per_class)
-        precision = PrecisionMetric().evaluate(
-            ground_truth, prediction, average
-        )
-        recall = RecallMetric().evaluate(ground_truth, prediction, average)
+        precision = PrecisionMetric()(ground_truth, prediction)
+        recall = RecallMetric()(ground_truth, prediction)
         return (2 * (precision * recall)) / (precision + recall)
 
 

@@ -154,7 +154,7 @@ if __name__ == "__main__":
         model = choose_model(target_feature.type)
         metrics, metric_names = choose_metrics(model.type)
         data_split = choose_data_split()
-        if data_split:
+        if metrics and data_split:
             # create pipeline object
             modelling_pipeline = Pipeline(
                 metrics,
