@@ -33,7 +33,7 @@ class KNearestNeighborsClassification(Model):
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         predictions = [self._predict_single(x) for x in observations]
-        return np.ndarray(predictions)
+        return np.array(predictions)
 
     # Predict a single point
     def _predict_single(self, observation: np.ndarray):
@@ -47,6 +47,9 @@ class KNearestNeighborsClassification(Model):
         # Check the label aka ground truth of those points
         k_nearest_labels = [self.parameters["ground_truth"][i]
                             for i in k_indices]
+        # Convert k_nearest_labels list of np.arrays to tuples,
+        # so that counter works
+        tuples_nearest_labels = [tuple(array) for array in k_nearest_labels]
         # Take the most common label and return it to the caller
-        most_common = Counter(k_nearest_labels).most_common()
-        return most_common[0][0]
+        most_common_array = Counter(tuples_nearest_labels).most_common()[0][0]
+        return np.array(most_common_array)

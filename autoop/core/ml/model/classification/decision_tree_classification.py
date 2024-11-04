@@ -38,7 +38,7 @@ class DecisionTreeClassification(Model):
         # store parameters
         self.parameters = {
             "feature_importances_": self._dt_model.feature_importances_,
-            "n_node_samples": self._dt_model.n_node_samples,
+            "n_node_samples": self._dt_model.tree_.n_node_samples,
             "tree_": self._dt_model.tree_
         }
 
