@@ -1,5 +1,5 @@
 import unittest
-from sklearn.datasets import load_iris
+import pickle
 import pandas as pd
 from autoop.core.ml.pipeline import Pipeline
 from autoop.core.ml.dataset import Dataset
@@ -55,15 +55,20 @@ class TestModels(unittest.TestCase):
         self.pipeline._evaluate()
         self.assertIsNotNone(self.pipeline._predictions)
         self.assertIsNotNone(self.pipeline._metrics_results)
-        print(self.pipeline._metrics_results)
-        print(self.pipeline._predictions)
         knn_model = KNeighborsClassifier(n_neighbors=3)
         x_train = self.pipeline._compact_vectors(vectors=self.pipeline._train_X)
         knn_model.fit(x_train, self.pipeline._train_y)
         x_test = self.pipeline._compact_vectors(vectors=self.pipeline._test_X)
-        print(knn_model.predict(x_test))
         self.assertEqual(self.pipeline._predictions.all(), knn_model.predict(x_test).all())
         #self.assertEqual(self.pipeline._metrics_results[0][1], accuracy_score(self.pipeline._predictions, self.pipeline._test_y))
         self.assertEqual(self.pipeline._metrics_results[1][1], precision_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
         self.assertEqual(self.pipeline._metrics_results[2][1], recall_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
         self.assertEqual(self.pipeline._metrics_results[3][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
+
+    def test_artifacts(self):
+        self.pipeline._preprocess_features()
+        self.pipeline._split_data()
+        self.pipeline._train()
+        self.assertIsNotNone(self.pipeline.artifacts)
+        model_artifact = self.pipeline.artifacts[-1].read()
+        model = pickle.loads(model_artifact)

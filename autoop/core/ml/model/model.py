@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from autoop.core.ml.artifact import Artifact
 import numpy as np
 from copy import deepcopy
-from typing import Literal
+import pickle
 
 
 class Model(ABC):
@@ -18,6 +18,14 @@ class Model(ABC):
     @abstractmethod
     def predict(self, observations: np.ndarray) -> np.ndarray:
         pass
+
+    def to_artifact(self, name: str) -> Artifact:
+        model_artifact = Artifact(
+            name=name,
+            data=pickle.dumps(self),
+            type=f"model:{self.type}"
+        )
+        return model_artifact
 
     @property
     def parameters(self) -> dict:
