@@ -130,16 +130,12 @@ class PrecisionMetric(Metric):
     """Calculates precision score based on average."""
 
     def evaluate(self, ground_truth: list[float],
-                 prediction: list[float],
-                 average: str = 'micro') -> float:
+                 prediction: list[float]) -> float:
         """Evaluate method for the precision score metric.
-        Average is used so that this metric can be used on
-        generic multi-class classification tasks.
 
         Arguments:
             ground_truth (list[Any]): list of ground truth values
             prediction (list[Any]): list of prediction values
-            average (str): string of average method (micro or macro)
 
         Returns:
             float: calculated precision score
@@ -156,16 +152,12 @@ class RecallMetric(Metric):
     """Calculates metric score based on average."""
 
     def evaluate(self, ground_truth: list[float],
-                 prediction: list[float],
-                 average: str = 'micro') -> float:
+                 prediction: list[float]) -> float:
         """Evaluate method for the recall score metric.
-        Average is used so that this metric can be used on
-        generic multi-class classification tasks.
 
         Arguments:
             ground_truth (list[Any]): list of ground truth values
             prediction (list[Any]): list of prediction values
-            average (str): string of average method (micro or macro)
 
         Returns:
             float: calculated recall score
@@ -179,16 +171,12 @@ class F1Score(Metric):
     """Calculates metric score based on average."""
 
     def evaluate(self, ground_truth: list[float],
-                 prediction: list[float],
-                 average: str = 'micro') -> float:
+                 prediction: list[float]) -> float:
         """Evaluate method for the F1 score metric.
-        Average is used so that this metric can be used on
-        generic multi-class classification tasks.
 
         Arguments:
             ground_truth (list[Any]): list of ground truth values
             prediction (list[Any]): list of prediction values
-            average (str): string of average method (micro or macro)
 
         Returns:
             float: calculated F1 score
