@@ -34,7 +34,7 @@ class RandomForestClassification(Model):
         self._rf_model.fit(observations, ground_truth)
 
         # store parameters
-        self.parameters = {
+        self._parameters = {
             "feature_importances_": self._rf_model.feature_importances_,
             "n_classes_": self._rf_model.n_classes_,
             "n_features_": self._rf_model.n_features_in_,

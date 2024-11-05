@@ -39,7 +39,7 @@ class LassoRegression(Model):
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         self._lasso_model.fit(observations, ground_truth)
         # Store learned parameters
-        self.parameters = {
+        self._parameters = {
             "coeff_": self._lasso_model.coef_,
             "intercept_": self._lasso_model.intercept_
         }

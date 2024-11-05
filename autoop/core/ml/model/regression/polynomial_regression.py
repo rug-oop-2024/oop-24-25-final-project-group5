@@ -28,8 +28,9 @@ class PolynomialRegression(Model):
         # fit linear regression model
         self._linear_model.fit(X_poly, ground_truth)
         # store parameters
-        self.parameters = {"coef_": self._linear_model.coef_}
-        self.parameters = {"intercept_": self._linear_model.intercept_}
+        self._parameters = {"coef_": self._linear_model.coef_,
+                            "intercept_": self._linear_model.intercept_
+                            }
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
         # transform observations to polynomial features

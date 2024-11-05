@@ -10,7 +10,7 @@ class MultipleLinearRegression(Model):
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         # Store observations and ground_truth in parameters
-        self.parameters = {
+        self._parameters = {
             "observations": observations,
             "ground_truth": ground_truth
         }

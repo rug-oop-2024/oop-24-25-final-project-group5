@@ -11,8 +11,6 @@ class KNearestNeighborsClassification(Model):
         self.type = "classification"
         # store hyperparameter k
         self.hyperparameters = {"k": k}
-        # set observations and ground_truth to None in parameters
-        self.parameters = {"observations": None, "ground_truth": None}
 
         self.hyperparameter_descriptions = {
             "k": "Number of neighbors to consider for classification"
@@ -26,7 +24,7 @@ class KNearestNeighborsClassification(Model):
 
     # Store observations and ground_truth in parameters
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray):
-        self.parameters = {
+        self._parameters = {
             "observations": observations,
             "ground_truth": ground_truth
         }

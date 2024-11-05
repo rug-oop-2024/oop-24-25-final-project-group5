@@ -36,7 +36,7 @@ class DecisionTreeClassification(Model):
         # fit the Decision Tree model
         self._dt_model.fit(observations, ground_truth)
         # store parameters
-        self.parameters = {
+        self._parameters = {
             "feature_importances_": self._dt_model.feature_importances_,
             "n_node_samples": self._dt_model.tree_.n_node_samples,
             "tree_": self._dt_model.tree_

@@ -58,39 +58,36 @@ def choose_model(feature_type: str) -> Model:
     st.write(f"You chose the following model: {model_name}")
     model_type = get_model(model_name)
 
-    model = model_type()
     # Add hyper parameters
-    hyper_params = model.hyperparameters
-    hyper_params_desc = model.hyperparameter_descriptions
+    model_instance = model_type()
+    hyper_params = model_instance.hyperparameters
+    hyper_params_desc = model_instance.hyperparameter_descriptions
 
     if len(hyper_params) == 0:
         st.write("The model does not have any hyperparameters.")
-        return model
+        return model_instance
 
     st.write("Please choose the hyperparameters for the model:")
+    for param_name, param_value in hyper_params.items():
+        param_type = type(param_value)
 
-    hyper_params_selector = st.empty()
+        st.write(f"## Parameter: {param_name}")
+        st.write(f"Description: {hyper_params_desc[param_name]}")
 
-    with hyper_params_selector.container():
-        for param_name, param_value in hyper_params.items():
-            param_type = type(param_value)
-
-            st.write(f"## Parameter: {param_name}")
-            st.write(f"Description: {hyper_params_desc[param_name]}")
-
-            if param_type == bool:
-                hyper_params[param_name] = st.checkbox(param_name, value=hyper_params[param_name])
-            elif param_type == int:
-                hyper_params[param_name] = st.number_input(param_name, value=hyper_params[param_name])
-            elif param_type == float:
-                hyper_params[param_name] = st.number_input(param_name, value=hyper_params[param_name])
-            elif param_type == str:
-                hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
-            elif param_type is None:
-                hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
-            else:
-                st.write(f"Unsupported hyperparameter type: {param_type}")
-    return model
+        if param_type == bool:
+            hyper_params[param_name] = st.checkbox(param_name, value=hyper_params[param_name])
+        elif param_type == int:
+            hyper_params[param_name] = st.number_input(param_name, value=hyper_params[param_name])
+        elif param_type == float:
+            hyper_params[param_name] = st.number_input(param_name, value=hyper_params[param_name])
+        elif param_type == str:
+            hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
+        elif param_type is None:
+            hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
+        else:
+            st.write(f"Unsupported hyperparameter type: {param_type}")
+    model_instance = model_type(**hyper_params)
+    return model_instance
 
 
 def choose_metrics(model_type: str) -> list[Metric]:
@@ -115,7 +112,7 @@ def choose_input_features(dataset: Dataset) -> list[Feature]:
     feature_names = [feature.name for feature in dataset_features]
     feature_name = st.multiselect("Please choose your input features:", options=feature_names,
         format_func=lambda feature_name: f"{feature_name}")
-    
+
     if not feature_name:
         return None
 
@@ -183,10 +180,10 @@ if __name__ == "__main__":
         st.markdown(f"{target_feature.name} (type: {target_feature.type})")
 
         st.markdown("### Selected model:")
-        st.markdown(f"Name: {model.__class__.__name__}")
-        st.markdown(f"Type: {model.type.capitalize()}")
+        st.markdown(f"Name: {modelling_pipeline.model.__class__.__name__}")
+        st.markdown(f"Type: {modelling_pipeline.model.type.capitalize()}")
         st.markdown("### Model Hyperparameters:")
-        for hyper_param, value in model.hyperparameters.items():
+        for hyper_param, value in modelling_pipeline.model.hyperparameters.items():
             st.markdown(f"**{hyper_param}**: {value}")
 
         st.markdown("### Model Metrics:")
@@ -211,6 +208,11 @@ if __name__ == "__main__":
                                      placeholder="1.0.0")
 
     if st.button("Save Pipeline") and modelling_pipeline:
+        # does not save parameters after training for some reason
+        # probably have to use session state to retain the model's parameters
+        # or rerun the execute() method <-- temp fix
+        modelling_pipeline.execute()
+        print(modelling_pipeline.model.parameters)
         automl = AutoMLSystem.get_instance()
         pipeline_artifact = Artifact(
             name=artifact_name,
