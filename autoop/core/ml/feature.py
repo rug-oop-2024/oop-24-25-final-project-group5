@@ -1,15 +1,12 @@
-
 from pydantic import BaseModel, Field
 from typing import Literal
-import numpy as np
-
-from autoop.core.ml.dataset import Dataset
 
 
 class Feature(BaseModel):
-    """Feature class that describes the type of the feature."""
+    """Feature class that describes the name and type of the feature."""
     name: str = Field()
     type: Literal["categorical", "numerical"] = Field()
 
-    def __str__(self):
-        return f"Feature with column name {self.name} and of type {self.type}"
+    def __str__(self) -> str:
+        """Returns a formatted string representing the feature."""
+        return f"Feature with name {self.name} and type {self.type}"

@@ -4,14 +4,14 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class RandomForestClassification(Model):
-    def __init__(self, n_estimators=100, max_depth=None,
+    def __init__(self, n_estimators=100, max_depth=-1,
                  min_samples_split=2) -> None:
         super().__init__()
         self.type = "classification"
         # initialize with hyperparameters
         self._rf_model = RandomForestClassifier(
             n_estimators=n_estimators,
-            max_depth=max_depth,
+            max_depth=max_depth if max_depth != -1 else None,
             min_samples_split=min_samples_split
         )
 

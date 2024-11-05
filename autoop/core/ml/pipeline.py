@@ -40,7 +40,7 @@ class Pipeline():
         """Returns the pipeline as a formatted string."""
         return f"""
 Pipeline(
-    model={self._model.type},
+    model={self._model.__class__.__name__},
     input_features={list(map(str, self._input_features))},
     target_feature={str(self._target_feature)},
     split={self._split},
@@ -160,7 +160,7 @@ Pipeline(
         """Submethod for evaluating the testing data."""
         X = self._compact_vectors(self._train_X)
         Y = self._train_y
-        self._metrics_results = []
+        self._training_metrics_results = []
         predictions = self._model.predict(X)
         for metric in self._metrics:
             result = metric.evaluate(predictions, Y)
