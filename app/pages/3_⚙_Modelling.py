@@ -230,7 +230,7 @@ if __name__ == "__main__":
 
         # Show results of metrics
         st.write("### Metrics Results")
-
+        print(results)
         metrics_df = pd.DataFrame(results["metrics"])
 
         # Modify first column with names
