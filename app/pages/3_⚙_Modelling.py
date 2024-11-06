@@ -8,6 +8,7 @@ from autoop.core.ml.artifact import Artifact
 from autoop.core.ml.feature import Feature
 from autoop.functional.feature import detect_feature_types
 from autoop.core.ml.pipeline import Pipeline
+import pandas as pd
 
 
 st.set_page_config(page_title="Modelling", page_icon="⚙")
@@ -194,26 +195,24 @@ if __name__ == "__main__":
         st.write("Please create the modelling pipeline first.")
 
     st.divider()
-    if st.button("Train") and modelling_pipeline:
-        # no actual implementation, just testing
-        results = modelling_pipeline.execute()
-        print(results["metrics"])
-        print(results["predictions"])
+
 
     artifact_name = st.text_input("Enter pipeline name",
                                   max_chars=20,
                                   placeholder="awesome_pipeline")
-    artifact_version = st.text_input("Enter pipeline name",
+    artifact_version = st.text_input("Enter pipeline version",
                                      max_chars=10,
                                      placeholder="1.0.0")
 
-    if st.button("Save Pipeline") and modelling_pipeline:
-        # does not save parameters after training for some reason
-        # probably have to use session state to retain the model's parameters
-        # or rerun the execute() method <-- temp fix, since parameters might be different
-        # for some models
-        modelling_pipeline.execute()
-        print(modelling_pipeline.model.parameters)
+    train_button = st.button("Train and Save")
+    if train_button and modelling_pipeline:
+        # no actual implementation, just testing
+        results = modelling_pipeline.execute()
+
+        # Place in session state
+        st.session_state["modelling_pipeline_results"] = results
+        st.session_state["modelling_pipeline"] = modelling_pipeline
+
         automl = AutoMLSystem.get_instance()
         pipeline_artifact = Artifact(
             name=artifact_name,
@@ -223,3 +222,40 @@ if __name__ == "__main__":
             type="pipeline"
         )
         automl.registry.register(pipeline_artifact)
+
+        #    "metrics": self._metrics_results,
+        #     "predictions": self._predictions,
+        #     "training_metrics": self._training_metrics_results,
+        #     "training_predictions": self._training_predictions
+
+        # Show results of metrics
+        st.write("### Metrics Results")
+
+        metrics_df = pd.DataFrame(results["metrics"])
+
+        # Modify first column with names
+        metrics_df.columns = ["Metric", "Value"]
+
+        metrics_df["Metric"] = metrics_df["Metric"].apply(lambda x: type(x).__name__)
+
+        st.write(metrics_df)
+
+        # Show predictions
+        st.write("### Predictions")
+        st.write(pd.DataFrame(results["predictions"]).transpose())
+
+        # Show training metrics
+        st.write("### Training Metrics Results")
+
+        training_metrics_df = pd.DataFrame(results["training_metrics"])
+
+        # Modify first column with names
+        training_metrics_df.columns = ["Metric", "Value"]
+        training_metrics_df["Metric"] = training_metrics_df["Metric"].apply(lambda x: type(x).__name__)
+
+        st.write(training_metrics_df)
+
+        # Show training predictions
+        st.write("### Training Predictions")
+        st.write(pd.DataFrame(results["training_predictions"]).transpose())
+
