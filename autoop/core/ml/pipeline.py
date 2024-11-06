@@ -167,7 +167,7 @@ Pipeline(
             self._training_metrics_results.append((metric, result))
         self._training_predictions = predictions
 
-    def execute(self) -> dict[str, np.ndarray | tuple[Metric, float]]:
+    def execute(self) -> dict[str, np.ndarray | list[tuple[Metric, float]]]:
         """Executes the entire pipeline:
             (1.) Preprocesses features.
             (2.) Splits data into training and testing sets.
