@@ -26,12 +26,6 @@ class DecisionTreeClassification(Model):
         """
         super().__init__()
         self.type = "classification"
-        # initialize with hyperparamters
-        self._dt_model = DecisionTreeClassifier(
-            criterion=criterion,
-            max_depth=max_depth if max_depth != -1 else None,
-            min_samples_split=min_samples_split
-        )
 
         self.hyperparameters = {
             "criterion": criterion,
@@ -49,6 +43,11 @@ class DecisionTreeClassification(Model):
             "min_samples_split": "The minimum number of samples required to "
                                  "split an internal node."
         }
+        self._dt_model = DecisionTreeClassifier(
+            criterion=criterion,
+            max_depth=max_depth if max_depth != -1 else None,
+            min_samples_split=min_samples_split
+        )
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """Method that fits the model based on

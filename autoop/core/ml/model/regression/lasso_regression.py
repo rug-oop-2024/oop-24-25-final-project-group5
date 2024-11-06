@@ -3,10 +3,23 @@ import numpy as np
 from sklearn.linear_model import Lasso
 
 
-# Inherit from Model
 class LassoRegression(Model):
-    def __init__(self, alpha=1.0, max_iter=1000,
-                 tol=0.0001, selection='cyclic') -> None:
+    def __init__(self,
+                 alpha: int = 1.0,
+                 max_iter: int = 1000,
+                 tol: int = 0.0001,
+                 selection: str = 'cyclic') -> None:
+        """Initializes the model and sets the hyperparameters
+        based on type of model. Hyperparameters are listed as arguments.
+
+        Arguments:
+            alpha (int): constant that multiplies the model's
+                         L1 term, default is 1.0.
+            max_iter (int): maximum number of iterations, default is 1000.
+            tol (int): tolerance of the optimization, default is 0.0001.
+            selection (str): changes how coefficients are looped over,
+                             either 'cyclic' or 'random', default is 'cyclic'.
+        """
         super().__init__()
         self.type = "regression"
 
@@ -27,22 +40,38 @@ class LassoRegression(Model):
                          "features sequentially. Defaults to 'cyclic'."
         }
 
-        # initialize Lasso model with hyperparameters
         self._lasso_model = Lasso(
-            alpha=self.hyperparameters["alpha"],
-            max_iter=self.hyperparameters["max_iter"],
-            tol=self.hyperparameters["tol"],
-            selection=self.hyperparameters["selection"]
+            alpha=alpha,
+            max_iter=max_iter,
+            tol=tol,
+            selection=selection
         )
 
-    # Fit data, store coefficient and intercept in parameters
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
+        """Method that fits the model based on
+        observations and their ground truth and stores
+        the model's parameters in a dictionary.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for training.
+            ground_truth (np.ndarray): value of response for
+                                        given observations.
+        """
         self._lasso_model.fit(observations, ground_truth)
-        # Store learned parameters
-        self._parameters = {
+        self.parameters = {
             "coeff_": self._lasso_model.coef_,
             "intercept_": self._lasso_model.intercept_
         }
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
+        """Method that returns predictions based on
+        a set of observations.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for predicting.
+        Returns:
+            predicted behavior of observation as np.ndarray.
+        """
         return self._lasso_model.predict(observations)

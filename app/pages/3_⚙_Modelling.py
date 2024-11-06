@@ -210,7 +210,8 @@ if __name__ == "__main__":
     if st.button("Save Pipeline") and modelling_pipeline:
         # does not save parameters after training for some reason
         # probably have to use session state to retain the model's parameters
-        # or rerun the execute() method <-- temp fix
+        # or rerun the execute() method <-- temp fix, since parameters might be different
+        # for some models
         modelling_pipeline.execute()
         print(modelling_pipeline.model.parameters)
         automl = AutoMLSystem.get_instance()

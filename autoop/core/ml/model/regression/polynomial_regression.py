@@ -5,7 +5,13 @@ from sklearn.preprocessing import PolynomialFeatures
 
 
 class PolynomialRegression(Model):
-    def __init__(self, degree=2) -> None:
+    def __init__(self, degree: int = 2) -> None:
+        """Initializes the model and sets the hyperparameters
+        based on type of model. Hyperparameters are listed as arguments.
+
+        Arguments:
+            degree (int): degree of polynomial features, default is 2.
+        """
         super().__init__()
         # set degree as hyperparameter
         self.hyperparameters = {"degree": degree}
@@ -14,15 +20,22 @@ class PolynomialRegression(Model):
         }
         self.type = "regression"
 
-        # initialize linear regression model
         self._linear_model = LinearRegression()
-        # polynomial features
         self._poly_features = PolynomialFeatures(
-            degree=self.hyperparameters["degree"]
+            degree=degree
         )
 
-    # fit: transform to polynomial features and train linear regression model
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
+        """Method that fits the model based on
+        observations and their ground truth and stores
+        the model's parameters in a dictionary.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for training.
+            ground_truth (np.ndarray): value of response for
+                                        given observations.
+        """
         # transform to polynomial features
         X_poly = self._poly_features.fit_transform(observations)
         # fit linear regression model
@@ -33,6 +46,15 @@ class PolynomialRegression(Model):
                             }
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
+        """Method that returns predictions based on
+        a set of observations.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for predicting.
+        Returns:
+            predicted behavior of observation as np.ndarray.
+        """
         # transform observations to polynomial features
         X_poly = self._poly_features.transform(observations)
         # use fitted model to predict

@@ -22,11 +22,6 @@ class RandomForestClassification(Model):
         """
         super().__init__()
         self.type = "classification"
-        self._rf_model = RandomForestClassifier(
-            n_estimators=n_estimators,
-            max_depth=max_depth if max_depth != -1 else None,
-            min_samples_split=min_samples_split
-        )
 
         self.hyperparameters = {
             "n_estimators": n_estimators,
@@ -40,6 +35,12 @@ class RandomForestClassification(Model):
             "min_samples_split": "The minimum number of samples required "
                                  "to split an internal node."
         }
+
+        self._rf_model = RandomForestClassifier(
+            n_estimators=n_estimators,
+            max_depth=max_depth if max_depth != -1 else None,
+            min_samples_split=min_samples_split
+        )
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
         """Method that fits the model based on

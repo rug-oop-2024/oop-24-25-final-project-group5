@@ -33,7 +33,7 @@ def load_pipeline():
         current_pipeline = pickle.loads(pipeline_artifact.read())
         print(current_pipeline)
         print(current_pipeline.model.parameters)
-        # CURRENT ISSUES: SAVED PIPELINE DOES NOT STORE PARAMETERS
+        print("artifacts", current_pipeline.artifacts)
 
 
 load_pipeline()
