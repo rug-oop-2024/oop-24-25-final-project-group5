@@ -4,18 +4,30 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class RandomForestClassification(Model):
-    def __init__(self, n_estimators=100, max_depth=-1,
-                 min_samples_split=2) -> None:
+    def __init__(self,
+                 n_estimators: int = 100,
+                 max_depth: int = -1,
+                 min_samples_split: int = 2) -> None:
+        """Initializes the model and sets the hyperparameters
+        based on type of model. Hyperparameters are listed as arguments.
+
+        Arguments:
+            n_estimators (int): number of trees in the forest,
+                                default is 100.
+            max_depth (int): maximum depth of the tree, default is -1
+                             and signals no maximum depth.
+            min_samples_split (int): minimum number of samples
+                                     required to split an internal
+                                     node, default is 2.
+        """
         super().__init__()
         self.type = "classification"
-        # initialize with hyperparameters
         self._rf_model = RandomForestClassifier(
             n_estimators=n_estimators,
             max_depth=max_depth if max_depth != -1 else None,
             min_samples_split=min_samples_split
         )
 
-        # store hyperparameters
         self.hyperparameters = {
             "n_estimators": n_estimators,
             "max_depth": max_depth,
@@ -30,10 +42,18 @@ class RandomForestClassification(Model):
         }
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
-        # fit random forest model
+        """Method that fits the model based on
+        observations and their ground truth and stores
+        the model's parameters in a dictionary.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for training.
+            ground_truth (np.ndarray): value of response for
+                                        given observations.
+        """
         self._rf_model.fit(observations, ground_truth)
 
-        # store parameters
         self._parameters = {
             "feature_importances_": self._rf_model.feature_importances_,
             "n_classes_": self._rf_model.n_classes_,
@@ -42,5 +62,13 @@ class RandomForestClassification(Model):
         }
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
-        # make predictions using fitted model
+        """Method that returns predictions based on
+        a set of observations.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for predicting.
+        Returns:
+            predicted behavior of observation as np.ndarray.
+        """
         return self._rf_model.predict(observations)

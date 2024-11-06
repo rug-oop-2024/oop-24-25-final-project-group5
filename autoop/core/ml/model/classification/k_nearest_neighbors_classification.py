@@ -1,40 +1,67 @@
 from autoop.core.ml.model.model import Model
 import numpy as np
 from collections import Counter
-from pydantic import field_validator
 
 
-# Inherit from Model
 class KNearestNeighborsClassification(Model):
-    def __init__(self, k=3) -> None:
+    """Class that implements the k-nearest neighbor algorithm."""
+
+    def __init__(self, k: int = 3) -> None:
+        """Initializes the model and sets the hyperparameters
+        based on the type of model. Hyperparameters are listed as arguments.
+
+        Arguments:
+            k (int): number of nearest neighbors to be considered
+                     during predictions, default is 3.
+        """
         super().__init__()
         self.type = "classification"
         # store hyperparameter k
+        if k <= 0:
+            raise ValueError("k must be greater than 0.")
         self.hyperparameters = {"k": k}
 
         self.hyperparameter_descriptions = {
             "k": "Number of neighbors to consider for classification"
         }
 
-    # Check that k >= 0
-    @field_validator("k")
-    def k_greater_than_zero(cls, value):
-        if value <= 0:
-            raise ValueError("k must be greater than 0.")
+    def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
+        """Method that stores the models parameters in a dictionary.
 
-    # Store observations and ground_truth in parameters
-    def fit(self, observations: np.ndarray, ground_truth: np.ndarray):
-        self._parameters = {
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for training.
+            ground_truth (np.ndarray): value of response for
+                                       given observations.
+        """
+        self.parameters = {
             "observations": observations,
             "ground_truth": ground_truth
         }
 
     def predict(self, observations: np.ndarray) -> np.ndarray:
+        """Method that returns predictions based on
+        a set of observations.
+
+        Arguments:
+            observations (np.ndarray): row(s) of a dataset
+                                       used for predicting.
+        Returns:
+            predicted behavior of observation as np.ndarray.
+        """
         predictions = [self._predict_single(x) for x in observations]
         return np.array(predictions)
 
-    # Predict a single point
-    def _predict_single(self, observation: np.ndarray):
+    def _predict_single(self, observation: np.ndarray) -> np.ndarray:
+        """Submethod of predict that predicts
+        a single row of observations.
+
+        Arguments:
+            observations (np.ndarray): row of the dataset
+                                       used for predicting.
+        Returns:
+            most common label of observations as np.ndarray.
+        """
         # Access k
         k = self.hyperparameters["k"]
         # Calculate distance between observation and every other point

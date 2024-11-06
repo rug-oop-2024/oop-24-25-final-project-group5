@@ -10,7 +10,7 @@ from autoop.functional.feature import detect_feature_types
 from autoop.core.ml.pipeline import Pipeline
 
 
-st.set_page_config(page_title="Modelling", page_icon="⚙")
+st.set_page_config(page_title="Deployment", page_icon="🚀")
 
 automl = AutoMLSystem.get_instance()
 pipelines = automl.registry.list(type="pipeline")

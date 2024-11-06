@@ -11,14 +11,6 @@ class Model(ABC):
     _hyperparameter_descriptions: dict = {}
     type: str = ""
 
-    @abstractmethod
-    def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
-        pass
-
-    @abstractmethod
-    def predict(self, observations: np.ndarray) -> np.ndarray:
-        pass
-
     def to_artifact(self, name: str) -> Artifact:
         model_artifact = Artifact(
             name=name,
@@ -27,9 +19,21 @@ class Model(ABC):
         )
         return model_artifact
 
+    @abstractmethod
+    def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:
+        pass
+
+    @abstractmethod
+    def predict(self, observations: np.ndarray) -> np.ndarray:
+        pass
+
     @property
     def parameters(self) -> dict:
         return deepcopy(self._parameters)
+
+    @parameters.setter
+    def parameters(self, params: dict) -> None:
+        self._parameters = params
 
     @property
     def hyperparameters(self) -> dict:
