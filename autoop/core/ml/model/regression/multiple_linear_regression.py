@@ -41,7 +41,7 @@ class MultipleLinearRegression(Model):
             predicted behavior of observation as np.ndarray.
         """
         # Check if the model has been trained
-        if not self.parameters["parameters"]:
+        if self.parameters["parameters"] is None:
             print("The model is not trained yet.")
 
         # Add a column of 1 for the intercept

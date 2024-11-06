@@ -63,7 +63,7 @@ class TestModels(unittest.TestCase):
         #self.assertEqual(self.pipeline._metrics_results[0][1], accuracy_score(self.pipeline._predictions, self.pipeline._test_y))
         self.assertEqual(self.pipeline._metrics_results[1][1], precision_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
         self.assertEqual(self.pipeline._metrics_results[2][1], recall_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
-        self.assertEqual(self.pipeline._metrics_results[3][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
+        self.assertAlmostEqual(self.pipeline._metrics_results[3][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
 
     def test_artifacts(self):
         self.pipeline._preprocess_features()

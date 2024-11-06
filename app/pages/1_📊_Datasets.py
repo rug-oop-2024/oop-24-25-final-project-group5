@@ -25,7 +25,6 @@ def upload_dataset(automl: AutoMLSystem):
             asset_path=uploaded_data.name,
             data=df
         )
-
         automl = automl.get_instance()
         automl.registry.register(dataset)
         st.success("Your dataset has been uploaded to the database!")
