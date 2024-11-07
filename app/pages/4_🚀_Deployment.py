@@ -27,7 +27,7 @@ def load_pipeline():
     # just trying to load pipelines :)
     pipeline_artifact = st.selectbox("Please choose the pipeline you want to use:",
                            options=pipelines,
-                           format_func=lambda pipeline: f"{pipeline.name}")
+                           format_func=lambda pipeline: f"{pipeline.name} - {pipeline.version}")
 
     if pipeline_artifact:
         current_pipeline = pickle.loads(pipeline_artifact.read())
