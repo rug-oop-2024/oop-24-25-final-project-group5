@@ -42,6 +42,3 @@ class TestMultipleLinearRegression(unittest.TestCase):
         # Test invalid fit when observations and ground_truth have mismatched sizes
         with self.assertRaises(ValueError):
             self.mlr.fit(self.observations, np.array([5, 7]))  # Incorrect length for ground_truth
-
-if __name__ == "__main__":
-    unittest.main()
