@@ -11,7 +11,7 @@ class DecisionTreeClassification(Model):
 
     def __init__(self,
                  criterion: str = "gini",
-                 max_depth: int = -1,
+                 max_depth: int = None,
                  min_samples_split: int = 2) -> None:
         """Initializes the model and sets the hyperparameters
         based on type of model. Hyperparameters are listed as arguments.
@@ -30,17 +30,17 @@ class DecisionTreeClassification(Model):
             raise ValueError('Criterion should be either "gini" '
                              'or "entropy".')
         if max_depth != -1 and max_depth < 0:
-            raise ValueError("Max depth should be bigger than 0 or -1 "
-                             "for no limit.")
+            raise ValueError("Max depth should be in range [1, inf) "
+                             "or -1 for no limit.")
         if min_samples_split < 2:
-            raise ValueError("Min samples split should be in range"
+            raise ValueError("Min samples split should be in range "
                              "[2, inf).")
 
         super().__init__()
         self.type = "classification"
         self.hyperparameters = {
             "criterion": criterion,
-            "max_depth": max_depth,
+            "max_depth": max_depth if max_depth != -1 else None,
             "min_samples_split": min_samples_split
         }
 

@@ -128,7 +128,7 @@ def choose_model(feature_type: str) -> Model:
     try:
         model_instance = model_type(**hyper_params)
     except ValueError as e:
-        st.write(f"Error trying to create the model: {e}")
+        st.write(f"### Error trying to create the model: {e}")
     return model_instance
 
 
@@ -140,7 +140,7 @@ def choose_metrics(model_type: str) -> list[Metric]:
 
     Returns: The chosen metrics
     """
-
+    st.write("## Metrics")
     metrics = METRICS_MAP
     if model_type == "regression":
         metric_names = METRICS[:3]
@@ -216,6 +216,7 @@ def choose_data_split() -> float:
     """
     Function to choose the data split
     """
+    st.write("## Data split")
     st.write("Please choose the data split ratio:")
     data_split = st.slider(
         "Please choose the data split ratio:",
@@ -254,91 +255,97 @@ if __name__ == "__main__":
         if st.button(label="View"):
             st.dataframe(dataset.read_as_data_frame())
 
-        st.markdown("### Input features:")
-        for feature in input_features:
-            st.markdown(f"{feature.name} (type: {feature.type})")
-
-        st.markdown("### Target features:")
-        st.markdown(f"{target_feature.name} (type: {target_feature.type})")
+        st.markdown("### Selected features:")
+        input_column, target_column = st.columns(2)
+        with input_column:
+            st.subheader("Input features:")
+            for feature in input_features:
+                st.markdown(f"**{feature.name}** (type: {feature.type})")
+        with target_column:
+            st.subheader("Target feature:")
+            st.markdown(f"**{target_feature.name}** "
+                        f"(type: {target_feature.type})")
 
         st.markdown("### Selected model:")
-        st.markdown(f"Name: {modelling_pipeline.model.__class__.__name__}")
-        st.markdown(f"Type: {modelling_pipeline.model.type.capitalize()}")
+        st.markdown(f"**Name**: {modelling_pipeline.model.__class__.__name__}")
+        st.markdown(f"**Type**: {modelling_pipeline.model.type.capitalize()}")
         st.markdown("### Model Hyperparameters:")
 
         items = modelling_pipeline.model.hyperparameters.items()
-        for hyper_param, value in items:
-            st.markdown(f"**{hyper_param}**: {value}")
+        hp_columns = st.columns(len(items))
+        for index, (hyper_param, value) in enumerate(items):
+            with hp_columns[index]:
+                st.metric(f"**{hyper_param}**", value)
 
         st.markdown("### Model Metrics:")
-        for metric in metric_names:
-            st.write(metric.capitalize())
+        metric_columns = st.columns(len(metric_names))
+        for index, metric in enumerate(metric_names):
+            with metric_columns[index]:
+                st.metric(label=f"{metric.replace('_', ' ').capitalize()}",
+                          value=None)
 
     else:
         st.write("Please create the modelling pipeline first.")
 
     st.divider()
+    if modelling_pipeline:
+        artifact_name = st.text_input("Enter pipeline name",
+                                      max_chars=20,
+                                      placeholder="cool_pipeline!")
+        artifact_version = st.text_input("Enter pipeline version",
+                                         max_chars=10,
+                                         placeholder="1.0.0")
 
-    artifact_name = st.text_input("Enter pipeline name",
-                                  max_chars=20,
-                                  placeholder="awesome_pipeline")
-    artifact_version = st.text_input("Enter pipeline version",
-                                     max_chars=10,
-                                     placeholder="1.0.0")
+        train_button = st.button("Train and Save")
+        if train_button:
+            results = modelling_pipeline.execute()
+            st.success("Succesfully trained and saved the pipeline!"
+                       "Please look beneath for the pipeline's results.")
 
-    train_button = st.button("Train and Save")
-    if train_button and modelling_pipeline:
-        # no actual implementation, just testing
-        results = modelling_pipeline.execute()
+            # Place in session state
+            st.session_state["modelling_pipeline_results"] = results
+            st.session_state["modelling_pipeline"] = modelling_pipeline
 
-        # Place in session state
-        st.session_state["modelling_pipeline_results"] = results
-        st.session_state["modelling_pipeline"] = modelling_pipeline
+            automl = AutoMLSystem.get_instance()
+            pipeline_artifact = Artifact(
+                name=artifact_name,
+                version=artifact_version,
+                data=pickle.dumps(modelling_pipeline),
+                asset_path=f"{artifact_name}.txt",
+                type="pipeline"
+            )
+            automl.registry.register(pipeline_artifact)
 
-        automl = AutoMLSystem.get_instance()
-        pipeline_artifact = Artifact(
-            name=artifact_name,
-            version=artifact_version,
-            data=pickle.dumps(modelling_pipeline),
-            asset_path=f"{artifact_name}.txt",
-            type="pipeline"
-        )
-        automl.registry.register(pipeline_artifact)
+            # Show results of metrics
+            st.write("### Metrics Results")
+            print(results)
+            metrics_df = pd.DataFrame(results["metrics"])
 
-        #    "metrics": self._metrics_results,
-        #     "predictions": self._predictions,
-        #     "training_metrics": self._training_metrics_results,
-        #     "training_predictions": self._training_predictions
+            # Modify first column with names
+            metrics_df.columns = ["Metric", "Value"]
 
-        # Show results of metrics
-        st.write("### Metrics Results")
-        print(results)
-        metrics_df = pd.DataFrame(results["metrics"])
+            metrics_df["Metric"] = (metrics_df["Metric"]
+                                    .apply(lambda x: type(x).__name__))
 
-        # Modify first column with names
-        metrics_df.columns = ["Metric", "Value"]
+            st.write(metrics_df)
 
-        metrics_df["Metric"] = (metrics_df["Metric"]
-                                .apply(lambda x: type(x).__name__))
+            # Show predictions
+            st.write("### Predictions")
+            st.write(pd.DataFrame(results["predictions"]).transpose())
 
-        st.write(metrics_df)
+            # Show training metrics
+            st.write("### Training Metrics Results")
 
-        # Show predictions
-        st.write("### Predictions")
-        st.write(pd.DataFrame(results["predictions"]).transpose())
+            training_metrics_df = pd.DataFrame(results["training_metrics"])
 
-        # Show training metrics
-        st.write("### Training Metrics Results")
+            # Modify first column with names
+            training_metrics_df.columns = ["Metric", "Value"]
+            training_metrics_df["Metric"] = (
+                training_metrics_df["Metric"].apply(lambda x: type(x).__name__)
+            )
 
-        training_metrics_df = pd.DataFrame(results["training_metrics"])
+            st.write(training_metrics_df)
 
-        # Modify first column with names
-        training_metrics_df.columns = ["Metric", "Value"]
-        training_metrics_df["Metric"] = (training_metrics_df["Metric"]
-                                         .apply(lambda x: type(x).__name__))
-
-        st.write(training_metrics_df)
-
-        # Show training predictions
-        st.write("### Training Predictions")
-        st.write(pd.DataFrame(results["training_predictions"]).transpose())
+            # Show training predictions
+            st.write("### Training Predictions")
+            st.write(pd.DataFrame(results["training_predictions"]).transpose())
