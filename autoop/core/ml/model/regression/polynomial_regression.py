@@ -14,12 +14,16 @@ class PolynomialRegression(Model):
         """
         super().__init__()
         # set degree as hyperparameter
+        if degree <= 0:
+            raise ValueError("Cannot have a zero or negative degree for the polynomial.")
+
         self.hyperparameters = {"degree": degree}
         self.hyperparameter_descriptions = {
             "degree": "Degree of polynomial features"
         }
         self.type = "regression"
 
+        
         self._linear_model = LinearRegression()
         self._poly_features = PolynomialFeatures(
             degree=degree
