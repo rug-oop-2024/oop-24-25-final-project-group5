@@ -1,24 +1,26 @@
-import streamlit as st
 import pickle
-import pandas as pd
+
 import numpy as np
+import pandas as pd
+import streamlit as st
+
 from app.core.system import AutoMLSystem
 from autoop.core.ml.dataset import Dataset
-from autoop.core.ml.metric import Metric, METRICS_MAP, METRICS
-from autoop.core.ml.model import *
-from autoop.core.ml.artifact import Artifact
 from autoop.core.ml.feature import Feature
-from autoop.functional.feature import detect_feature_types
 from autoop.core.ml.pipeline import Pipeline
+from autoop.functional.feature import detect_feature_types
 from autoop.functional.preprocessing import preprocess_features
-
 
 st.set_page_config(page_title="Deployment", page_icon="🚀")
 
 automl = AutoMLSystem.get_instance()
 pipelines = automl.registry.list(type="pipeline")
 
-def write_helper_text(text: str):
+
+def write_helper_text(text: str) -> None:
+    """
+    Function to write helper text in a specific format.
+    """
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
 
 
@@ -26,11 +28,15 @@ st.write("# 🚀 Deployment")
 write_helper_text("In this section, you can deploy pre-existing pipelines.")
 
 
-def load_pipeline():
-    # just trying to load pipelines :)
-    pipeline_artifact = st.selectbox("Please choose the pipeline you want to use:",
-                           options=pipelines,
-                           format_func=lambda pipeline: f"{pipeline.name} - {pipeline.version}")
+def load_pipeline() -> None:
+    """
+    Function to load a pipeline from the registry.
+    """
+    pipeline_artifact = st.selectbox(
+        "Please choose the pipeline you want to use:",
+        options=pipelines,
+        format_func=lambda pipeline: f"{pipeline.name} - {pipeline.version}"
+    )
 
     if pipeline_artifact:
         current_pipeline = pickle.loads(pipeline_artifact.read())
@@ -39,28 +45,50 @@ def load_pipeline():
         print(current_pipeline.model.parameters)
         print("artifacts", current_pipeline.artifacts)
 
+
 def choose_input_features(dataset: Dataset) -> list[Feature]:
+    """
+    Function to choose input features from a dataset.
+    Args:
+        dataset: The dataset to choose features from
+
+    Returns: The chosen features
+    """
     dataset_features = detect_feature_types(dataset)
 
     feature_names = [feature.name for feature in dataset_features]
-    feature_name = st.multiselect("Please choose your input features:", options=feature_names,
-        format_func=lambda feature_name: f"{feature_name}")
+    feature_name = st.multiselect(
+        "Please choose your input features:",
+        options=feature_names,
+        format_func=lambda feature_name: f"{feature_name}"
+    )
 
     if not feature_name:
         return None
 
     st.write(f"You chose the following input features: {feature_name}")
 
-    return [feature for feature in dataset_features if feature.name in feature_name]
+    return [feature for feature in dataset_features
+            if feature.name in feature_name]
 
 
 def run_pipeline_prediction(pipeline: Pipeline,
                             dataset: Dataset,
                             features: list[Feature]) -> np.ndarray:
+    """
+    Function to run predictions using a pipeline.
+    Args:
+        pipeline: The pipeline to use for predictions
+        dataset: The dataset to use for predictions
+        features: The features to use for predictions
+
+    Returns:
+        The predictions
+    """
     input_results = preprocess_features(features, dataset)
     input_vectors = (
-            [data for (feature_name, data, artifact) in input_results]
-        )
+        [data for (feature_name, data, artifact) in input_results]
+    )
     X = np.concatenate(input_vectors, axis=1)
     return pipeline.model.predict(X)
 
@@ -91,7 +119,7 @@ if current_pipeline:
                 asset_path=csv_data.name,
                 data=df
             )
-            st.dataframe(dataset.readAsDataFrame())
+            st.dataframe(dataset.read_as_data_frame())
             input_features = choose_input_features(dataset)
             if st.button("Run predictions"):
                 predictions = run_pipeline_prediction(

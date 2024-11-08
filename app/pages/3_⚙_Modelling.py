@@ -1,35 +1,48 @@
-import streamlit as st
 import pickle
-from app.core.system import AutoMLSystem
-from autoop.core.ml.dataset import Dataset
-from autoop.core.ml.metric import Metric, METRICS_MAP, METRICS
-from autoop.core.ml.model import *
-from autoop.core.ml.artifact import Artifact
-from autoop.core.ml.feature import Feature
-from autoop.functional.feature import detect_feature_types
-from autoop.core.ml.pipeline import Pipeline
-import pandas as pd
 
+import pandas as pd
+import streamlit as st
+
+from app.core.system import AutoMLSystem
+from autoop.core.ml.artifact import Artifact
+from autoop.core.ml.dataset import Dataset
+from autoop.core.ml.feature import Feature
+from autoop.core.ml.metric import Metric, METRICS_MAP, METRICS
+from autoop.core.ml.model import get_models, get_model, Model
+from autoop.core.ml.pipeline import Pipeline
+from autoop.functional.feature import detect_feature_types
 
 st.set_page_config(page_title="Modelling", page_icon="⚙")
 
 
-def write_helper_text(text: str):
+def write_helper_text(text: str) -> None:
+    """
+    Function to write helper text in a specific format.
+    """
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
 
 
 st.write("# ⚙ Modelling")
-write_helper_text("In this section, you can design a pipeline to train a model on a dataset.")
+write_helper_text("In this section, you can design a pipeline "
+                  "to train a model on a dataset.")
 
 automl = AutoMLSystem.get_instance()
 
-datasets = automl.registry.list_of_type(type_class=Dataset, list_type="dataset")
+datasets = automl.registry.list_of_type(type_class=Dataset,
+                                        list_type="dataset")
 
 
 def choose_dataset() -> Dataset:
-    dataset = st.selectbox("Please choose your dataset:",
-                           options=datasets,
-                           format_func=lambda dataset: f"{dataset.name} - {dataset.version}")
+    """
+    Function to choose a dataset from the registry.
+    Returns: The chosen dataset
+    """
+    dataset = st.selectbox(
+        "Please choose your dataset:",
+        options=datasets,
+        format_func=lambda dataset: f"{dataset.name} - {dataset.version}"
+    )
+
     if dataset:
         st.write("You chose the following dataset:")
 
@@ -38,23 +51,33 @@ def choose_dataset() -> Dataset:
             st.session_state["dataset_index"] = datasets.index(dataset)
             st.switch_page("pages/3_🔪_Slicing.py")
 
-        st.dataframe(dataset.readAsDataFrame().head(10))
+        st.dataframe(dataset.read_as_data_frame().head(10))
+
     return dataset
 
 
 def choose_model(feature_type: str) -> Model:
+    """
+    Function to choose a model and its hyperparameters.
+
+    Args:
+        feature_type: The type of the target feature
+    """
     models = get_models()
     if feature_type == "categorical":
-        model_names = [model for model in models if models[model] == "classification"]
+        model_names = [model for model in models
+                       if models[model] == "classification"]
     else:
-        model_names = [model for model in models if models[model] == "regression"]
-    model_name = st.selectbox("Please choose your model:",
-                              options=model_names, 
-                              format_func=lambda model_name: f"{model_name} - {models[model_name]}")
+        model_names = [model for model in models
+                       if models[model] == "regression"]
+    model_name = st.selectbox(
+        "Please choose your model:",
+        options=model_names,
+        format_func=lambda model_name: f"{model_name} - {models[model_name]}"
+    )
 
     if not model_name:
         return None
-
 
     st.write(f"You chose the following model: {model_name}")
     model_type = get_model(model_name)
@@ -76,15 +99,30 @@ def choose_model(feature_type: str) -> Model:
         st.write(f"Description: {hyper_params_desc[param_name]}")
 
         if param_type == bool:
-            hyper_params[param_name] = st.checkbox(param_name, value=hyper_params[param_name])
+            hyper_params[param_name] = st.checkbox(
+                param_name,
+                value=hyper_params[param_name]
+            )
         elif param_type == int:
-            hyper_params[param_name] = st.number_input(param_name, value=hyper_params[param_name])
+            hyper_params[param_name] = st.number_input(
+                param_name,
+                value=hyper_params[param_name]
+            )
         elif param_type == float:
-            hyper_params[param_name] = st.number_input(param_name, value=hyper_params[param_name])
+            hyper_params[param_name] = st.number_input(
+                param_name,
+                value=hyper_params[param_name]
+            )
         elif param_type == str:
-            hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
+            hyper_params[param_name] = st.text_input(
+                param_name,
+                value=hyper_params[param_name]
+            )
         elif param_type is None:
-            hyper_params[param_name] = st.text_input(param_name, value=hyper_params[param_name])
+            hyper_params[param_name] = st.text_input(
+                param_name,
+                value=hyper_params[param_name]
+            )
         else:
             st.write(f"Unsupported hyperparameter type: {param_type}")
     model_instance = model_type(**hyper_params)
@@ -92,13 +130,25 @@ def choose_model(feature_type: str) -> Model:
 
 
 def choose_metrics(model_type: str) -> list[Metric]:
+    """
+    Function to choose metrics for the model.
+    Args:
+        model_type: The type of the model
+
+    Returns: The chosen metrics
+    """
+
     metrics = METRICS_MAP
     if model_type == "regression":
         metric_names = METRICS[:3]
     elif model_type == "classification":
         metric_names = METRICS[3:]
-    metric_name = st.multiselect("Please choose your metrics:", options=metric_names,
-        format_func=lambda metric_name: f"{metric_name.replace('_', ' ').capitalize()}")
+    metric_name = st.multiselect(
+        "Please choose your metrics:",
+        options=metric_names,
+        format_func=lambda metric_name:
+            f"{metric_name.replace('_', ' ').capitalize()}"
+    )
 
     if not metric_name:
         return None, None
@@ -108,25 +158,46 @@ def choose_metrics(model_type: str) -> list[Metric]:
 
 
 def choose_input_features(dataset: Dataset) -> list[Feature]:
+    """
+    Function to choose input features from a dataset.
+    Args:
+        dataset: The dataset to choose features from
+
+    Returns:
+        The chosen features
+    """
     dataset_features = detect_feature_types(dataset)
 
     feature_names = [feature.name for feature in dataset_features]
-    feature_name = st.multiselect("Please choose your input features:", options=feature_names,
-        format_func=lambda feature_name: f"{feature_name}")
+    feature_name = st.multiselect(
+        "Please choose your input features:",
+        options=feature_names,
+        format_func=lambda feature_name: f"{feature_name}"
+    )
 
     if not feature_name:
         return None
 
     st.write(f"You chose the following input features: {feature_name}")
 
-    return [feature for feature in dataset_features if feature.name in feature_name]
+    return [feature for feature in dataset_features
+            if feature.name in feature_name]
 
 
 def choose_target_feature(dataset: Dataset) -> Feature:
+    """
+    Function to choose the target feature from a dataset.
+    Args:
+        dataset: The dataset to choose the target feature from
+
+    Returns: The chosen target feature
+    """
     dataset_features = detect_feature_types(dataset)
 
     feature_names = [feature.name for feature in dataset_features]
-    feature_name = st.selectbox("Please choose your target feature:", options=feature_names,
+    feature_name = st.selectbox(
+        "Please choose your target feature:",
+        options=feature_names,
         format_func=lambda feature_name: f"{feature_name}")
 
     if not feature_name:
@@ -134,12 +205,19 @@ def choose_target_feature(dataset: Dataset) -> Feature:
 
     st.write(f"You chose the following target feature: {feature_name}")
 
-    return [feature for feature in dataset_features if feature.name == feature_name][0]
+    return [feature for feature in dataset_features
+            if feature.name == feature_name][0]
 
 
 def choose_data_split() -> float:
-    st.write("Please choose the data split ratio: (how much data to use for training)")
-    data_split = st.slider("Please choose the data split ratio:", 0.0, 1.0, 0.8, 0.05)
+    """
+    Function to choose the data split
+    """
+    st.write("Please choose the data split ratio:")
+    data_split = st.slider(
+        "Please choose the data split ratio:",
+        0.0, 1.0, 0.8, 0.05
+    )
     return data_split
 
 
@@ -171,7 +249,7 @@ if __name__ == "__main__":
         st.markdown(f"**Name**: {dataset.name}")
         st.markdown(f"**Version**: {dataset.version}")
         if st.button(label="View"):
-            st.dataframe(dataset.readAsDataFrame())
+            st.dataframe(dataset.read_as_data_frame())
 
         st.markdown("### Input features:")
         for feature in input_features:
@@ -184,7 +262,9 @@ if __name__ == "__main__":
         st.markdown(f"Name: {modelling_pipeline.model.__class__.__name__}")
         st.markdown(f"Type: {modelling_pipeline.model.type.capitalize()}")
         st.markdown("### Model Hyperparameters:")
-        for hyper_param, value in modelling_pipeline.model.hyperparameters.items():
+
+        items = modelling_pipeline.model.hyperparameters.items()
+        for hyper_param, value in items:
             st.markdown(f"**{hyper_param}**: {value}")
 
         st.markdown("### Model Metrics:")
@@ -195,7 +275,6 @@ if __name__ == "__main__":
         st.write("Please create the modelling pipeline first.")
 
     st.divider()
-
 
     artifact_name = st.text_input("Enter pipeline name",
                                   max_chars=20,
@@ -236,7 +315,8 @@ if __name__ == "__main__":
         # Modify first column with names
         metrics_df.columns = ["Metric", "Value"]
 
-        metrics_df["Metric"] = metrics_df["Metric"].apply(lambda x: type(x).__name__)
+        metrics_df["Metric"] = (metrics_df["Metric"]
+                                .apply(lambda x: type(x).__name__))
 
         st.write(metrics_df)
 
@@ -251,11 +331,11 @@ if __name__ == "__main__":
 
         # Modify first column with names
         training_metrics_df.columns = ["Metric", "Value"]
-        training_metrics_df["Metric"] = training_metrics_df["Metric"].apply(lambda x: type(x).__name__)
+        training_metrics_df["Metric"] = (training_metrics_df["Metric"]
+                                         .apply(lambda x: type(x).__name__))
 
         st.write(training_metrics_df)
 
         # Show training predictions
         st.write("### Training Predictions")
         st.write(pd.DataFrame(results["training_predictions"]).transpose())
-
