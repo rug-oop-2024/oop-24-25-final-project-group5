@@ -38,7 +38,7 @@ class LassoRegression(Model):
         # set hyperparameters
         self.hyperparameters = {
             "alpha": alpha,
-            "max_iter": max_iter if max_iter != -1 else None,
+            "max_iter": max_iter,
             "tol": tol,
             "selection": selection
         }

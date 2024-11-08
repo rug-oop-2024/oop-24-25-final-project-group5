@@ -154,7 +154,7 @@ def choose_metrics(model_type: str) -> list[Metric]:
     )
 
     if not metric_name:
-        return [], None
+        return None, None
 
     st.write(f"You chose the following metrics: {metric_name}")
     return [metrics[metric_name] for metric_name in metric_name], metric_name

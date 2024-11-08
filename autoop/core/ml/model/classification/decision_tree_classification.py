@@ -40,7 +40,7 @@ class DecisionTreeClassification(Model):
         self.type = "classification"
         self.hyperparameters = {
             "criterion": criterion,
-            "max_depth": max_depth if max_depth != -1 else None,
+            "max_depth": max_depth,
             "min_samples_split": min_samples_split
         }
 
@@ -48,7 +48,7 @@ class DecisionTreeClassification(Model):
             "criterion": "The function to measure the quality of a split."
                          "Supported criteria are 'gini' for the Gini impurity "
                          "and 'entropy' for the information gain.",
-            "max_depth": "The maximum depth of the tree. If None, then nodes"
+            "max_depth": "The maximum depth of the tree. If -1, then nodes "
                          "are expanded until all leaves are pure or until all "
                          "leaves contain less than min_samples_split samples.",
             "min_samples_split": "The minimum number of samples required to "
