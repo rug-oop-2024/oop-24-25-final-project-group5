@@ -14,10 +14,6 @@ METRICS = [
 ]
 
 
-def get_metric(name: str):
-    return METRICS_MAP[name]
-
-
 class Metric(ABC):
     """Base class for all metrics."""
 
@@ -49,6 +45,18 @@ class Metric(ABC):
             float: calculated metric
         """
         pass
+
+
+def get_metric(name: str) -> Metric:
+    """
+    Returns the metric object based
+    on the name provided.
+    Args:
+        name: name of the metric
+
+    Returns: metric object
+    """
+    return METRICS_MAP[name]
 
 
 # Regression Metrics
@@ -105,7 +113,7 @@ class R2Score(Metric):
 
         regression_soq = np.sum((ground_truth - prediction) ** 2)
         total_soq = np.sum((ground_truth - np.mean(ground_truth)) ** 2)
-        return 1 - (regression_soq/total_soq)
+        return 1 - (regression_soq / total_soq)
 
 
 # Classification Metrics
