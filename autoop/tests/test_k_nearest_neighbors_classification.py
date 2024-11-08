@@ -9,7 +9,7 @@ class TestKNearestNeighborsClassification(unittest.TestCase):
     def setUp(self):
         # Setting up example data for testing
         self.observations = np.array([[1, 2], [2, 3], [3, 4], [5, 6], [6, 7]])
-        self.ground_truth = np.array([0, 1, 0, 1, 0])
+        self.ground_truth = np.array([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1]])
         self.knn = KNearestNeighborsClassification(k=3)
         self.knn.fit(self.observations, self.ground_truth)
 
