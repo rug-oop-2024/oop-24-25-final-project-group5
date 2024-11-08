@@ -23,6 +23,9 @@ class LassoRegression(Model):
         super().__init__()
         self.type = "regression"
 
+        if(alpha == 0):
+            raise ValueError("Cannot have a 0 alpha in a Lasso Regression")
+
         # set hyperparameters
         self.hyperparameters = {
             "alpha": alpha,
