@@ -1,6 +1,4 @@
-"""
-The `classification` module contains the classification models.
-"""
+"""The classification module contains the classification models."""
 
 from autoop.core.ml.model.classification.decision_tree_classification \
     import DecisionTreeClassification  # noqa: F401

@@ -1,19 +1,26 @@
-from pydantic import BaseModel, Field
 import base64
 
 
-class Artifact(BaseModel):
+class Artifact():
     """Artifact object used to store assets
     containing specific asset information.
     """
 
-    name: str = Field()
-    version: str = Field(default="1.0.0")
-    asset_path: str = Field(default="")
-    tags: list = Field(default=[])
-    metadata: dict = Field(default={})
-    data: bytes = Field()
-    type: str = Field(default="")
+    def __init__(self,
+                 name: str,
+                 data: bytes,
+                 version: str = "1.0.0",
+                 asset_path: str = "",
+                 tags: list = [],
+                 metadata: dict = {},
+                 type: str = "") -> None:
+        self.name = name
+        self.version = version
+        self.asset_path = asset_path
+        self.tags = tags
+        self.metadata = metadata
+        self.data = data
+        self.type = type
 
     def read(self) -> bytes:
         """Returns objects stored data.

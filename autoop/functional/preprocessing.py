@@ -7,12 +7,13 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 def preprocess_features(
         features: List[Feature],
-        dataset: Dataset
-) -> list[Tuple[str, np.ndarray, dict]]:
+        dataset: Dataset) -> list[Tuple[str, np.ndarray, dict]]:
     """Preprocess features.
-    Args:
+
+    Arguments:
         features (List[Feature]): List of features.
         dataset (Dataset): Dataset object.
+
     Returns:
         list[str, Tuple[np.ndarray, dict]]: List of preprocessed features.
         Each ndarray of shape (N, ...)

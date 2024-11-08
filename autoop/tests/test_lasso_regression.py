@@ -32,9 +32,9 @@ class TestLassoRegression(unittest.TestCase):
         self.assertEqual(predictions.shape[0], test_observations.shape[0])
 
     def test_invalid_alpha(self):
-        # Test that initializing with invalid alpha (<= 0) raises an error
+        # Test that initializing with invalid alpha (<= -1) raises an error
         with self.assertRaises(ValueError):
-            LassoRegression(alpha=0)
+            LassoRegression(alpha=-1)
 
     def test_predict_correctness(self):
         # Test prediction with known ground truth

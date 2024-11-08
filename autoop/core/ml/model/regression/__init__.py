@@ -1,6 +1,4 @@
-"""
-The regression module contains the regression models.
-"""
+"""The regression module contains the regression models."""
 
 from autoop.core.ml.model.regression.multiple_linear_regression \
     import MultipleLinearRegression  # noqa: F401

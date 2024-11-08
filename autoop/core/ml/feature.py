@@ -1,12 +1,14 @@
-from pydantic import BaseModel, Field
 from typing import Literal
 
 
-class Feature(BaseModel):
+class Feature():
     """Feature class that describes the name and type of the feature."""
 
-    name: str = Field()
-    type: Literal["categorical", "numerical"] = Field()
+    def __init__(self,
+                 name: str,
+                 type: Literal["categorical", "numerical"]) -> None:
+        self.name = name
+        self.type = type
 
     def __str__(self) -> str:
         """Returns a formatted string representing the feature."""

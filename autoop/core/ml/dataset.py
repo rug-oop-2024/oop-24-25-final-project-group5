@@ -19,13 +19,13 @@ class Dataset(Artifact):
             asset_path: str,
             version: str = "1.0.0"
     ) -> 'Dataset':
-        """
-        Create a dataset from a data frame.
-        Args:
-            data: data frame to be saved.
-            name: name of the dataset.
-            asset_path: path to save the dataset.
-            version: version of the dataset.
+        """Create a dataset from a data frame.
+
+        Arguments:
+            data (pd.DataFrame): data frame to be saved.
+            name (str): name of the dataset.
+            asset_path (str): path to save the dataset.
+            version (str): version of the dataset.
 
         Returns:
             The dataset object.
@@ -40,7 +40,9 @@ class Dataset(Artifact):
     def read_as_data_frame(self) -> pd.DataFrame:
         """
         Read the data frame from the dataset.
-        Returns: The data frame.
+
+        Returns:
+            The data frame as pd.DataFrame.
         """
         bytes = super().read()
         csv = bytes.decode()
@@ -49,10 +51,12 @@ class Dataset(Artifact):
     def save(self, data: pd.DataFrame) -> bytes:
         """
         Save the data frame as a csv file.
-        Args:
-            data: - data frame to be saved.
 
-        Returns: The bytes of the saved data frame.
+        Arguments:
+            data (pd.DataFrame): data frame to be saved.
+
+        Returns:
+            The bytes of the saved data frame.
         """
         bytes = data.to_csv(index=False).encode()
         return super().save(bytes)

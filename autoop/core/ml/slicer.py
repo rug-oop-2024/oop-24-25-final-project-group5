@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-from pydantic import BaseModel, Field
 
 
-class Slicer(ABC, BaseModel):
+class Slicer(ABC):
     """
     Abstract class for slicers. This class defines
     the interface for different slicer implementations.
@@ -37,20 +36,27 @@ class Slicer(ABC, BaseModel):
         return result
 
 
-class NumericRangeSlicer(Slicer, BaseModel):
+class NumericRangeSlicer(Slicer):
     """
     Slicer for numerical data. This will slice
     data based on a given column and a range
     of values to include.
     """
 
-    column: str = Field()
-    min: float = Field()
-    max: float = Field()
+    def __init__(self, column: str, min: float, max: float) -> None:
+        """Initializes the numeric slicer.
+
+        Arguments:
+            column (str): column to be sliced.
+            min (float): minimum range.
+            max (float): maximum range.
+        """
+        self.column = column
+        self.min = min
+        self.max = max
 
     def should_include(self, row: pd.Series) -> bool:
-        """
-        Check if a row should be included in the
+        """Check if a row should be included in the
         sliced data
 
         Args:
@@ -62,20 +68,28 @@ class NumericRangeSlicer(Slicer, BaseModel):
         return self.min <= row[self.column] <= self.max
 
 
-class CategoricalSlicer(Slicer, BaseModel):
+class CategoricalSlicer(Slicer):
     """
     Slicer for categorical data. This will slice
     data based on a given column and a list of
     categories to include.
     """
-    column: str = Field()
-    categories: list[str] = Field()
+
+    def __init__(self, column: str, categories: list[str]) -> None:
+        """Initializes the numeric slicer.
+
+        Arguments:
+            column (str): column to be sliced.
+            categories (list[str]): categories to be included
+        """
+        self.column = column
+        self.categories = categories
 
     def should_include(self, row: pd.Series) -> bool:
-        """
-        Check if a row should be included in the
+        """Check if a row should be included in the
         sliced data
-        Args:
+
+        Arguments:
             row: Row to check
 
         Returns: True if the row should be included, False otherwise
