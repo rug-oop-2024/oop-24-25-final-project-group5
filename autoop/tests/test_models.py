@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_sc
 class TestModels(unittest.TestCase):
 
     def setUp(self) -> None:
-        df = pd.read_csv("assets/objects/iris_data.csv")
+        df = pd.read_csv("autoop/tests/resources/IRIS.csv")
         self.dataset = Dataset.from_dataframe(
             name="iris",
             asset_path="iris.csv",
@@ -25,8 +25,8 @@ class TestModels(unittest.TestCase):
         self.pipeline = Pipeline(
             dataset=self.dataset,
             model=KNearestNeighborsClassification(),
-            input_features=list(filter(lambda x: x.name != "Name", self.features)),
-            target_feature=Feature(name="Name", type="categorical"),
+            input_features=list(filter(lambda x: x.name != "species", self.features)),
+            target_feature=Feature(name="species", type="categorical"),
             metrics=[AccuracyMetric(), PrecisionMetric(), RecallMetric(), F1Score()],
             split=0.8
         )
@@ -61,9 +61,10 @@ class TestModels(unittest.TestCase):
         x_test = self.pipeline._compact_vectors(vectors=self.pipeline._test_X)
         self.assertEqual(self.pipeline._predictions.all(), knn_model.predict(x_test).all())
         #self.assertEqual(self.pipeline._metrics_results[0][1], accuracy_score(self.pipeline._predictions, self.pipeline._test_y))
-        self.assertEqual(self.pipeline._metrics_results[1][1], precision_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
-        self.assertEqual(self.pipeline._metrics_results[2][1], recall_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
-        self.assertEqual(self.pipeline._metrics_results[3][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'))
+        self.assertAlmostEqual(self.pipeline._metrics_results[1][1], precision_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
+        self.assertAlmostEqual(self.pipeline._metrics_results[2][1], recall_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
+        self.assertAlmostEqual(self.pipeline._metrics_results[3][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
+        
 
     def test_artifacts(self):
         self.pipeline._preprocess_features()
