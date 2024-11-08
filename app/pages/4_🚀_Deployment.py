@@ -18,9 +18,7 @@ pipelines = automl.registry.list(type="pipeline")
 
 
 def write_helper_text(text: str) -> None:
-    """
-    Function to write helper text in a specific format.
-    """
+    """Function to write helper text in a specific format."""
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
 
 
@@ -29,9 +27,7 @@ write_helper_text("In this section, you can deploy pre-existing pipelines.")
 
 
 def load_pipeline() -> None:
-    """
-    Function to load a pipeline from the registry.
-    """
+    """Function to load a pipeline from the registry."""
     pipeline_artifact = st.selectbox(
         "Please choose the pipeline you want to use:",
         options=pipelines,
@@ -49,10 +45,12 @@ def load_pipeline() -> None:
 def choose_input_features(dataset: Dataset) -> list[Feature]:
     """
     Function to choose input features from a dataset.
-    Args:
-        dataset: The dataset to choose features from
 
-    Returns: The chosen features
+    Arguments:
+        dataset (Dataset): dataset to choose features from.
+
+    Returns:
+        list of chosen feature(s).
     """
     dataset_features = detect_feature_types(dataset)
 
@@ -76,14 +74,15 @@ def run_pipeline_prediction(pipeline: Pipeline,
                             dataset: Dataset,
                             features: list[Feature]) -> np.ndarray:
     """
-    Function to run predictions using a pipeline.
-    Args:
-        pipeline: The pipeline to use for predictions
-        dataset: The dataset to use for predictions
-        features: The features to use for predictions
+    Function to run predictions using the selected pipeline.
+
+    Arguments:
+        pipeline (Pipeline): the pipeline to use for predictions.
+        dataset (Dataset): the dataset to use for predictions.
+        features (list[Feature]): feature(s) to use for predictions.
 
     Returns:
-        The predictions
+        the predictions as an np.ndarray.
     """
     input_results = preprocess_features(features, dataset)
     input_vectors = (

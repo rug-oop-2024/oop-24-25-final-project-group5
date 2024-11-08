@@ -16,9 +16,7 @@ st.set_page_config(page_title="Modelling", page_icon="⚙")
 
 
 def write_helper_text(text: str) -> None:
-    """
-    Function to write helper text in a specific format.
-    """
+    """Function to write helper text in a specific format."""
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
 
 
@@ -35,7 +33,9 @@ datasets = automl.registry.list_of_type(type_class=Dataset,
 def choose_dataset() -> Dataset:
     """
     Function to choose a dataset from the registry.
-    Returns: The chosen dataset
+
+    Returns:
+        the chosen dataset.
     """
     dataset = st.selectbox(
         "Please choose your dataset:",
@@ -60,8 +60,8 @@ def choose_model(feature_type: str) -> Model:
     """
     Function to choose a model and its hyperparameters.
 
-    Args:
-        feature_type: The type of the target feature
+    Arguments:
+        feature_type (str): the type of the target feature.
     """
     models = get_models()
     if feature_type == "categorical":
@@ -135,10 +135,12 @@ def choose_model(feature_type: str) -> Model:
 def choose_metrics(model_type: str) -> list[Metric]:
     """
     Function to choose metrics for the model.
-    Args:
-        model_type: The type of the model
 
-    Returns: The chosen metrics
+    Arguments:
+        model_type (str): the model's type.
+
+    Returns:
+        A list of chosen metric(s).
     """
     st.write("## Metrics")
     metrics = METRICS_MAP
@@ -163,11 +165,12 @@ def choose_metrics(model_type: str) -> list[Metric]:
 def choose_input_features(dataset: Dataset) -> list[Feature]:
     """
     Function to choose input features from a dataset.
-    Args:
-        dataset: The dataset to choose features from
+
+    Arguments:
+        dataset (Dataset): dataset to choose features from.
 
     Returns:
-        The chosen features
+        list of chosen feature(s).
     """
     dataset_features = detect_feature_types(dataset)
 
@@ -190,10 +193,12 @@ def choose_input_features(dataset: Dataset) -> list[Feature]:
 def choose_target_feature(dataset: Dataset) -> Feature:
     """
     Function to choose the target feature from a dataset.
-    Args:
-        dataset: The dataset to choose the target feature from
 
-    Returns: The chosen target feature
+    Arguments:
+        dataset (Dataset): dataset to choose the target feature from.
+
+    Returns:
+        chosen target feature.
     """
     dataset_features = detect_feature_types(dataset)
 
@@ -214,7 +219,10 @@ def choose_target_feature(dataset: Dataset) -> Feature:
 
 def choose_data_split() -> float:
     """
-    Function to choose the data split
+    Function to choose the data split.
+
+    Returns:
+        float resembling dats split ratio.
     """
     st.write("## Data split")
     st.write("Please choose the data split ratio:")

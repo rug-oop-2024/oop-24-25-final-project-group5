@@ -10,19 +10,16 @@ datasets = automl.registry.list(type="dataset")
 
 
 def write_helper_text(text: str) -> None:
-    """
-    Function to write helper text in a specific format.
-    Returns:
-
-    """
+    """Function to write helper text in a specific format."""
     st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
 
 
 def upload_dataset(automl: AutoMLSystem) -> None:
     """
     Function to upload a dataset to the database.
-    Args:
-        automl: The AutoMLSystem instance
+
+    Arguments:
+        automl (AutoMLSystem): the auto machine learning instance.
     """
     uploaded_data = st.file_uploader("Upload a .csv file", 'csv')
     if uploaded_data is not None:
@@ -43,8 +40,9 @@ def upload_dataset(automl: AutoMLSystem) -> None:
 def manage_datasets(automl: AutoMLSystem) -> None:
     """
     Function to manage datasets in the database.
-    Args:
-        automl: The AutoMLSystem instance
+
+    Arguments:
+        automl (AutoMLSystem): the auto machine learning instance.
     """
     datasets = automl.registry.list_of_type(
         type_class=Dataset,

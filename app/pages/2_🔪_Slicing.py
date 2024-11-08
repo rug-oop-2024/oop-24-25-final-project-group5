@@ -25,19 +25,20 @@ dataset = st.selectbox(
 )
 
 
-def slicer(
-        column: str,
-        column_type: Literal["categorical", "numerical"],
-        dataset_frame: pd.DataFrame
-) -> Slicer:
+def slicer(column: str,
+           column_type: Literal["categorical", "numerical"],
+           dataset_frame: pd.DataFrame) -> Slicer:
     """
-    Function to generate a slicer for
-    Args:
-        column: The column to slice
-        column_type: The type of the column
-        dataset_frame: The dataset frame
+    Function that generates the dats slicer.
+
+    Arguments:
+        column (str): the column to slice.
+        column_type (Literal["categorical", "numerical"]):
+            the type of the column
+        dataset_frame (pd.DataFrame): the dataset frame.
+
     Returns:
-        The slicer object
+        The slicer object.
     """
     st.write(f"## {column.replace('_', ' ')}")
     if column_type == "categorical":
