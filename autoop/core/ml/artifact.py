@@ -14,6 +14,18 @@ class Artifact():
                  tags: list = [],
                  metadata: dict = {},
                  type: str = "") -> None:
+        """
+        Initializes an artifact object.
+
+        Arguments:
+            name (str): name of artifact
+            data (bytes): data encoded in bytes
+            version (str): version of the asset
+            asset_path (str): path to the asset file
+            tags (list): list of tags associated with the asset
+            metadata (dict): metadata for the asset
+            type (str): type of the asset
+        """
         self.name = name
         self.version = version
         self.asset_path = asset_path

@@ -7,6 +7,13 @@ class Feature():
     def __init__(self,
                  name: str,
                  type: Literal["categorical", "numerical"]) -> None:
+        """Initializes a feature
+
+        Arguments:
+            name (str): name of the feature/column
+            type (Literal["categorical", "numerical"]):
+                type of feature, either categorical or numerical
+        """
         self.name = name
         self.type = type
 
