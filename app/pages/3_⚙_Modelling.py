@@ -125,7 +125,10 @@ def choose_model(feature_type: str) -> Model:
             )
         else:
             st.write(f"Unsupported hyperparameter type: {param_type}")
-    model_instance = model_type(**hyper_params)
+    try:
+        model_instance = model_type(**hyper_params)
+    except ValueError as e:
+        st.write(f"Error trying to create the model: {e}")
     return model_instance
 
 
@@ -151,7 +154,7 @@ def choose_metrics(model_type: str) -> list[Metric]:
     )
 
     if not metric_name:
-        return None, None
+        return [], None
 
     st.write(f"You chose the following metrics: {metric_name}")
     return [metrics[metric_name] for metric_name in metric_name], metric_name

@@ -24,9 +24,17 @@ class DecisionTreeClassification(Model):
                                      required to split an internal
                                      node, default is 2.
         """
+        if criterion not in ['gini', 'entropy']:
+            raise ValueError("Criterion should be either gini "
+                             "or entropy.")
+        if max_depth != -1 and max_depth < 0:
+            raise ValueError("Max depth should be bigger than 0 or -1 "
+                             "for no limit.")
+        if min_samples_split < 2:
+            raise ValueError("Min samples split should be at least 2.")
+
         super().__init__()
         self.type = "classification"
-
         self.hyperparameters = {
             "criterion": criterion,
             "max_depth": max_depth,

@@ -23,12 +23,17 @@ class RandomForestClassification(Model):
                                      required to split an internal
                                      node, default is 2.
         """
+        if n_estimators <= 0:
+            raise ValueError("Model must have a positive amount of "
+                             "estimators.")
+        if max_depth != -1 and max_depth < 0:
+            raise ValueError("Max depth should be bigger than 0 or -1 "
+                             "for no limit.")
+        if min_samples_split < 2:
+            raise ValueError("Min samples split must be at least 2.")
+
         super().__init__()
         self.type = "classification"
-
-        if n_estimators <= 0:
-            raise ValueError("Cannot have 0 estimators")
-
         self.hyperparameters = {
             "n_estimators": n_estimators,
             "max_depth": max_depth,
@@ -37,7 +42,8 @@ class RandomForestClassification(Model):
 
         self.hyperparameter_descriptions = {
             "n_estimators": "The number of trees in the forest.",
-            "max_depth": "The maximum depth of the tree.",
+            "max_depth": "The maximum depth of the tree, -1 sets the maximum "
+                         "depth to zero.",
             "min_samples_split": "The minimum number of samples required "
                                  "to split an internal node."
         }
