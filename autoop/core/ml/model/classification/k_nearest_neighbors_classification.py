@@ -14,8 +14,9 @@ class KNearestNeighborsClassification(Model):
             k (int): number of nearest neighbors to be considered
                      during predictions, default is 3.
         """
-        if k <= 0:
-            raise ValueError("k must be greater than 0.")
+        if k < 1:
+            raise ValueError("k must be greater than 1.")
+
         super().__init__()
         self.type = "classification"
         self.hyperparameters = {"k": k}

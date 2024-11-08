@@ -4,13 +4,12 @@ from sklearn.linear_model import Lasso
 
 
 class LassoRegression(Model):
-    """
-    Lasso regression model.
-    """
+    """Lasso regression model."""
+
     def __init__(self,
-                 alpha: int = 1.0,
+                 alpha: float = 1.0,
                  max_iter: int = 1000,
-                 tol: int = 0.0001,
+                 tol: float = 0.0001,
                  selection: str = 'cyclic') -> None:
         """Initializes the model and sets the hyperparameters
         based on type of model. Hyperparameters are listed as arguments.
@@ -23,12 +22,19 @@ class LassoRegression(Model):
             selection (str): changes how coefficients are looped over,
                              either 'cyclic' or 'random', default is 'cyclic'.
         """
+        if alpha < 0:
+            raise ValueError("Alpha must be in range [0.0, inf).")
+        if max_iter < 1 and max_iter != -1:
+            raise ValueError("Max number of iterations must be "
+                             "in range [1, inf) or -1 for no max limit.")
+        if tol < 0:
+            raise ValueError("Tol must be a float in range "
+                             "[0.0, inf).")
+        if selection not in ['cyclic', 'random']:
+            raise ValueError('Selection must be "cyclic" or "random".')
+
         super().__init__()
         self.type = "regression"
-
-        if alpha == 0:
-            raise ValueError("Cannot have a 0 alpha in a Lasso Regression")
-
         # set hyperparameters
         self.hyperparameters = {
             "alpha": alpha,
@@ -48,7 +54,7 @@ class LassoRegression(Model):
 
         self._lasso_model = Lasso(
             alpha=alpha,
-            max_iter=max_iter,
+            max_iter=max_iter if max_iter != -1 else None,
             tol=tol,
             selection=selection
         )

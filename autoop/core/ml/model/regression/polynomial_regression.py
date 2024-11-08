@@ -5,24 +5,22 @@ from sklearn.preprocessing import PolynomialFeatures
 
 
 class PolynomialRegression(Model):
-    """
-    Polynomial regression model.
-    """
+    """Polynomial regression model."""
+
     def __init__(self, degree: int = 2) -> None:
         """Initializes the model and sets the hyperparameters
         based on type of model. Hyperparameters are listed as arguments.
 
         Arguments:
-            degree (int): degree of polynomial features, default is 2.
+            degree (int): maximal degree of polynomial features, default is 2.
         """
-        super().__init__()
-        # set degree as hyperparameter
         if degree <= 0:
-            raise ValueError("Cannot have a <=0 degree for the polynomial.")
+            raise ValueError("Degree should be a number higher than 0.")
 
+        super().__init__()
         self.hyperparameters = {"degree": degree}
         self.hyperparameter_descriptions = {
-            "degree": "Degree of polynomial features"
+            "degree": "Maximal degree of polynomial features"
         }
         self.type = "regression"
 

@@ -4,8 +4,10 @@ from sklearn.tree import DecisionTreeClassifier
 
 
 class DecisionTreeClassification(Model):
-    """A wrapper class of the model DecisionTreeClassifier from
-    the library sklearn. """
+    """
+    A wrapper class of the model DecisionTreeClassifier
+    from the library sklearn.
+    """
 
     def __init__(self,
                  criterion: str = "gini",
@@ -25,13 +27,14 @@ class DecisionTreeClassification(Model):
                                      node, default is 2.
         """
         if criterion not in ['gini', 'entropy']:
-            raise ValueError("Criterion should be either gini "
-                             "or entropy.")
+            raise ValueError('Criterion should be either "gini" '
+                             'or "entropy".')
         if max_depth != -1 and max_depth < 0:
             raise ValueError("Max depth should be bigger than 0 or -1 "
                              "for no limit.")
         if min_samples_split < 2:
-            raise ValueError("Min samples split should be at least 2.")
+            raise ValueError("Min samples split should be in range"
+                             "[2, inf).")
 
         super().__init__()
         self.type = "classification"

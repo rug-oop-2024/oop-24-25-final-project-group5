@@ -6,7 +6,8 @@ import pickle
 
 
 class Model(ABC):
-    """Abstract base class for classification and regression models.
+    """
+    Abstract base class for classification and regression models.
     Implements abstract methods fit and predict, method to_artifact
     and all getter and setter methods.
     """

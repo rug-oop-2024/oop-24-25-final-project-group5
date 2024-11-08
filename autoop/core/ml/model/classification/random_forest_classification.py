@@ -4,9 +4,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class RandomForestClassification(Model):
-    """
-    Random forest classification model.
-    """
+    """Random forest classification model."""
+
     def __init__(self,
                  n_estimators: int = 100,
                  max_depth: int = -1,
@@ -24,13 +23,13 @@ class RandomForestClassification(Model):
                                      node, default is 2.
         """
         if n_estimators <= 0:
-            raise ValueError("Model must have a positive amount of "
-                             "estimators.")
+            raise ValueError("Model must be in range [1, inf).")
         if max_depth != -1 and max_depth < 0:
-            raise ValueError("Max depth should be bigger than 0 or -1 "
-                             "for no limit.")
+            raise ValueError("Max depth should be in range "
+                             "[1, inf) or -1 for no max depth.")
         if min_samples_split < 2:
-            raise ValueError("Min samples split must be at least 2.")
+            raise ValueError("Min samples split must be in range "
+                             "[2, inf).")
 
         super().__init__()
         self.type = "classification"
@@ -43,7 +42,7 @@ class RandomForestClassification(Model):
         self.hyperparameter_descriptions = {
             "n_estimators": "The number of trees in the forest.",
             "max_depth": "The maximum depth of the tree, -1 sets the maximum "
-                         "depth to zero.",
+                         "depth to None.",
             "min_samples_split": "The minimum number of samples required "
                                  "to split an internal node."
         }
