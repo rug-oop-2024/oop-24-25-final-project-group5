@@ -4,6 +4,9 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class RandomForestClassification(Model):
+    """
+    Random forest classification model.
+    """
     def __init__(self,
                  n_estimators: int = 100,
                  max_depth: int = -1,

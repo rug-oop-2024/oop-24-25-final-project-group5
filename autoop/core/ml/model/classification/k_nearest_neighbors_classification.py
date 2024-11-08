@@ -65,8 +65,10 @@ class KNearestNeighborsClassification(Model):
         # Access k
         k = self.hyperparameters["k"]
         # Calculate distance between observation and every other point
-        distances = np.linalg.norm(self.parameters["observations"]
-                                   - observation, axis=1)
+        distances = np.linalg.norm(
+            self.parameters["observations"] - observation,
+            axis=1
+        )
         # Sort the array of the distances and take first k
         k_indices = np.argsort(distances)[:k]
         # Check the label aka ground truth of those points

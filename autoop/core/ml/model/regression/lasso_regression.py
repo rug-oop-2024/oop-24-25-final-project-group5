@@ -4,6 +4,9 @@ from sklearn.linear_model import Lasso
 
 
 class LassoRegression(Model):
+    """
+    Lasso regression model.
+    """
     def __init__(self,
                  alpha: int = 1.0,
                  max_iter: int = 1000,
@@ -23,7 +26,7 @@ class LassoRegression(Model):
         super().__init__()
         self.type = "regression"
 
-        if(alpha == 0):
+        if alpha == 0:
             raise ValueError("Cannot have a 0 alpha in a Lasso Regression")
 
         # set hyperparameters

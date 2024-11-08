@@ -3,6 +3,9 @@ import numpy as np
 
 
 class MultipleLinearRegression(Model):
+    """
+    Multiple linear regression model.
+    """
     def __init__(self) -> None:
         """Initializes the model."""
         super().__init__()
