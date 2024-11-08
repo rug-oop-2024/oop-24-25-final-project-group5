@@ -5,9 +5,8 @@ from autoop.core.storage import Storage
 
 
 class Database:
-    """
-    Database class to store the data
-    """
+    """Database class to store the data."""
+
     def __init__(self, storage: Storage) -> None:
         """
         Initialize the database

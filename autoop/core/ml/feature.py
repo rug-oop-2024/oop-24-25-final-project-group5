@@ -4,6 +4,7 @@ from typing import Literal
 
 class Feature(BaseModel):
     """Feature class that describes the name and type of the feature."""
+
     name: str = Field()
     type: Literal["categorical", "numerical"] = Field()
 

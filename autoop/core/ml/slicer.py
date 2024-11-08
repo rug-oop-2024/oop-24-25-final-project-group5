@@ -8,14 +8,14 @@ class Slicer(ABC, BaseModel):
     Abstract class for slicers. This class defines
     the interface for different slicer implementations.
     """
+
     @abstractmethod
     def should_include(self, row: pd.Series) -> bool:
-        """
-        Check if a row should be included in the
+        """Check if a row should be included in the
         sliced data
 
         Args:
-            row: Row to check
+            row (pd.Series): Row to check.
 
         Returns: True if the row should be included, False otherwise
         """
@@ -23,12 +23,12 @@ class Slicer(ABC, BaseModel):
 
     def slice(self, data: pd.DataFrame) -> pd.DataFrame:
         """
-        Slice data based on the given slicer
+        Slice data based on the given slicer.
 
         Args:
-            data: Data to slice
+            data (pd.DataFrame): Data to slice.
 
-        Returns: Sliced data
+        Returns: Sliced data.
         """
         result = data.copy()
         for i, row in data.iterrows():

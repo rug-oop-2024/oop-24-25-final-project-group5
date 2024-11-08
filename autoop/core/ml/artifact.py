@@ -6,6 +6,7 @@ class Artifact(BaseModel):
     """Artifact object used to store assets
     containing specific asset information.
     """
+
     name: str = Field()
     version: str = Field(default="1.0.0")
     asset_path: str = Field(default="")

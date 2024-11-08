@@ -6,14 +6,10 @@ from autoop.core.ml.artifact import Artifact
 
 
 class Dataset(Artifact):
-    """
-    Dataset class to store the data frame.
-    """
+    """Dataset class to store the data frame."""
 
     def __init__(self, *args, **kwargs) -> None:
-        """
-        Initialize the dataset object.
-        """
+        """Initialize the dataset object."""
         super().__init__(type="dataset", *args, **kwargs)
 
     @staticmethod

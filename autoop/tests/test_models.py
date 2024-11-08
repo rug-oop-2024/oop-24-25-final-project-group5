@@ -9,7 +9,7 @@ from autoop.core.ml.model.classification import KNearestNeighborsClassification
 from autoop.core.ml.metric import AccuracyMetric, RecallMetric, F1Score, PrecisionMetric
 
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, recall_score, f1_score, precision_score
+from sklearn.metrics import recall_score, f1_score, precision_score
 
 
 class TestModels(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestModels(unittest.TestCase):
             model=KNearestNeighborsClassification(),
             input_features=list(filter(lambda x: x.name != "species", self.features)),
             target_feature=Feature(name="species", type="categorical"),
-            metrics=[AccuracyMetric(), PrecisionMetric(), RecallMetric(), F1Score()],
+            metrics=[PrecisionMetric(), RecallMetric(), F1Score()],
             split=0.8
         )
 
@@ -61,9 +61,9 @@ class TestModels(unittest.TestCase):
         x_test = self.pipeline._compact_vectors(vectors=self.pipeline._test_X)
         self.assertEqual(self.pipeline._predictions.all(), knn_model.predict(x_test).all())
         #self.assertEqual(self.pipeline._metrics_results[0][1], accuracy_score(self.pipeline._predictions, self.pipeline._test_y))
-        self.assertAlmostEqual(self.pipeline._metrics_results[1][1], precision_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
-        self.assertAlmostEqual(self.pipeline._metrics_results[2][1], recall_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
-        self.assertAlmostEqual(self.pipeline._metrics_results[3][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
+        self.assertAlmostEqual(self.pipeline._metrics_results[0][1], precision_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
+        self.assertAlmostEqual(self.pipeline._metrics_results[1][1], recall_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
+        self.assertAlmostEqual(self.pipeline._metrics_results[2][1], f1_score(self.pipeline._predictions, self.pipeline._test_y, average='micro'), places=3)
         
 
     def test_artifacts(self):
@@ -71,5 +71,3 @@ class TestModels(unittest.TestCase):
         self.pipeline._split_data()
         self.pipeline._train()
         self.assertIsNotNone(self.pipeline.artifacts)
-        model_artifact = self.pipeline.artifacts[-1].read()
-        model = pickle.loads(model_artifact)

@@ -3,13 +3,10 @@ This module contains the model classes for regression and classification.
 """
 
 from autoop.core.ml.model.model import Model
-from autoop.core.ml.model.regression import MultipleLinearRegression
-from autoop.core.ml.model.regression import LassoRegression
-from autoop.core.ml.model.regression import PolynomialRegression
-from autoop.core.ml.model.classification import DecisionTreeClassification
-from autoop.core.ml.model.classification import RandomForestClassification
-from autoop.core.ml.model.classification import KNearestNeighborsClassification
-
+from autoop.core.ml.model.regression import MultipleLinearRegression, \
+    LassoRegression, PolynomialRegression
+from autoop.core.ml.model.classification import DecisionTreeClassification, \
+    RandomForestClassification, KNearestNeighborsClassification
 from typing import Literal
 
 REGRESSION_MODELS = {

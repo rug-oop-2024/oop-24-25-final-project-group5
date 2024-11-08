@@ -1,29 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import Any
 import numpy as np
-
-
-METRICS = [
-    "mean_squared_error",
-    "mean_absolute_error",
-    "r2_score",
-    "accuracy",
-    "precision",
-    "recall",
-    "f1_score"
-]
 
 
 class Metric(ABC):
     """Base class for all metrics."""
 
-    def __call__(self, ground_truth: list[Any],
-                 prediction: list[Any]) -> any:
+    def __call__(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> any:
         """Call method for any Metric object
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated metric
@@ -31,15 +19,15 @@ class Metric(ABC):
         return self.evaluate(ground_truth, prediction)
 
     @abstractmethod
-    def evaluate(self, ground_truth: list[Any],
-                 prediction: list[Any]) -> any:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> any:
         """Abstract evaluate method to be implemented
         separately in any class that inherits from
         the abstract class Metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated metric
@@ -63,13 +51,13 @@ def get_metric(name: str) -> Metric:
 class MeanSquaredError(Metric):
     """Mean Squared Error metric."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the mean squared error metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated mean squared error
@@ -80,13 +68,13 @@ class MeanSquaredError(Metric):
 class MeanAbsoluteError(Metric):
     """Mean Absolute Error metric."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the mean absoulte error metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated mean absolute error
@@ -97,13 +85,13 @@ class MeanAbsoluteError(Metric):
 class R2Score(Metric):
     """R-squared (R^2) score."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the R-squared score metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated R-squared score
@@ -120,13 +108,13 @@ class R2Score(Metric):
 class AccuracyMetric(Metric):
     """Calculates accuracy score."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the accuracy score metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated accuracy score
@@ -137,20 +125,17 @@ class AccuracyMetric(Metric):
 class PrecisionMetric(Metric):
     """Calculates precision score based on average."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the precision score metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated precision score
         """
-        ground_truth = np.array(ground_truth)
-        prediction = np.array(prediction)
-
         true_positive = np.sum((ground_truth == 1) & (prediction == 1))
         false_positive = np.sum((ground_truth == 0) & (prediction == 1))
         return true_positive / (true_positive + false_positive)
@@ -159,13 +144,13 @@ class PrecisionMetric(Metric):
 class RecallMetric(Metric):
     """Calculates metric score based on average."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the recall score metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated recall score
@@ -178,13 +163,13 @@ class RecallMetric(Metric):
 class F1Score(Metric):
     """Calculates metric score based on average."""
 
-    def evaluate(self, ground_truth: list[float],
-                 prediction: list[float]) -> float:
+    def evaluate(self, ground_truth: np.ndarray,
+                 prediction: np.ndarray) -> float:
         """Evaluate method for the F1 score metric.
 
         Arguments:
-            ground_truth (list[Any]): list of ground truth values
-            prediction (list[Any]): list of prediction values
+            ground_truth (np.ndarray): list of ground truth values
+            prediction (np.ndarray): list of prediction values
 
         Returns:
             float: calculated F1 score
@@ -205,3 +190,14 @@ METRICS_MAP = {
     "recall": RecallMetric(),
     "f1_score": F1Score()
 }
+
+
+METRICS = [
+    "mean_squared_error",
+    "mean_absolute_error",
+    "r2_score",
+    "accuracy",
+    "precision",
+    "recall",
+    "f1_score"
+]

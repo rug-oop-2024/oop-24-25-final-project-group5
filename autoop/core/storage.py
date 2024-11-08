@@ -8,6 +8,7 @@ class NotFoundError(Exception):
     """
     Exception for when a path is not found
     """
+
     def __init__(self, path: str) -> None:
         """
         Initialize NotFoundError with a
@@ -23,6 +24,7 @@ class Storage(ABC):
     Abstract class for storage. This class defines
     the interface for different storage implementations.
     """
+
     @abstractmethod
     def save(self, data: bytes, path: str) -> None:
         """
