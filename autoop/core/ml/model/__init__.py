@@ -1,3 +1,6 @@
+"""
+This module contains the model classes for regression and classification.
+"""
 
 from autoop.core.ml.model.model import Model
 from autoop.core.ml.model.regression import MultipleLinearRegression
@@ -21,14 +24,26 @@ CLASSIFICATION_MODELS = {
     "KNearestNeighbors": KNearestNeighborsClassification,
 }
 
+
 def get_models() -> dict[str, Literal["regression", "classification"]]:
-    return {**{model: "regression" for model in REGRESSION_MODELS}, **{model: "classification" for model in CLASSIFICATION_MODELS}}
+    """
+    Returns: a dictionary of models and their types.
+    """
+    return {**{model: "regression" for model in REGRESSION_MODELS},
+            **{model: "classification" for model in CLASSIFICATION_MODELS}}
+
 
 def get_model(model_name: str) -> type[Model]:
+    """
+    Returns the model class based on the model name.
+    Args:
+        model_name: name of the model
+
+    Returns: model class
+    """
     if model_name in REGRESSION_MODELS:
         return REGRESSION_MODELS[model_name]
     elif model_name in CLASSIFICATION_MODELS:
         return CLASSIFICATION_MODELS[model_name]
     else:
         raise ValueError(f"Model {model_name} not found")
-
