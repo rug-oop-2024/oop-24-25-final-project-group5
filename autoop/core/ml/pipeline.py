@@ -1,12 +1,13 @@
 import pickle
 
+import numpy as np
+
 from autoop.core.ml.artifact import Artifact
 from autoop.core.ml.dataset import Dataset
-from autoop.core.ml.model import Model
 from autoop.core.ml.feature import Feature
 from autoop.core.ml.metric import Metric
+from autoop.core.ml.model import Model
 from autoop.functional.preprocessing import preprocess_features
-import numpy as np
 
 
 class Pipeline():
@@ -18,8 +19,9 @@ class Pipeline():
                  model: Model,
                  input_features: list[Feature],
                  target_feature: Feature,
-                 split=0.8,
+                 split: float = 0.8,
                  ) -> None:
+        """Initializes the pipeline object."""
         self._dataset = dataset
         self._model = model
         self._input_features = input_features
@@ -81,7 +83,7 @@ Pipeline(
                                   data=pickle.dumps(pipeline_data)))
         artifacts.append(self._model.to_artifact(
             name=f"pipeline_model_{self._model.type}")
-                         )
+        )
         return artifacts
 
     def _register_artifact(self, name: str, artifact: Artifact) -> None:
@@ -156,7 +158,7 @@ Pipeline(
             self._metrics_results.append((metric, result))
         self._predictions = predictions
 
-    def _evaluate_training_set(self):
+    def _evaluate_training_set(self) -> None:
         """Submethod for evaluating the testing data."""
         X = self._compact_vectors(self._train_X)
         Y = self._train_y
