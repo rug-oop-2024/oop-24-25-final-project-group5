@@ -11,7 +11,7 @@ class DecisionTreeClassification(Model):
 
     def __init__(self,
                  criterion: str = "gini",
-                 max_depth: int = None,
+                 max_depth: int = -1,
                  min_samples_split: int = 2) -> None:
         """Initializes the model and sets the hyperparameters
         based on type of model. Hyperparameters are listed as arguments.

@@ -43,6 +43,7 @@ class NumericRangeSlicer(Slicer, BaseModel):
     data based on a given column and a range
     of values to include.
     """
+
     column: str = Field()
     min: float = Field()
     max: float = Field()
