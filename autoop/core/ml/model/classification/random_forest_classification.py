@@ -23,6 +23,9 @@ class RandomForestClassification(Model):
         super().__init__()
         self.type = "classification"
 
+        if n_estimators <= 0:
+            raise ValueError("Cannot have 0 estimators")
+
         self.hyperparameters = {
             "n_estimators": n_estimators,
             "max_depth": max_depth,
