@@ -62,7 +62,7 @@ class MeanSquaredError(Metric):
         Returns:
             float: calculated mean squared error
         """
-        return np.mean((np.array(ground_truth) - np.array(prediction)) ** 2)
+        return np.mean((ground_truth - prediction) ** 2)
 
 
 class MeanAbsoluteError(Metric):
@@ -79,7 +79,7 @@ class MeanAbsoluteError(Metric):
         Returns:
             float: calculated mean absolute error
         """
-        return np.mean(np.abs(np.array(ground_truth) - np.array(prediction)))
+        return np.mean(np.abs(ground_truth - prediction))
 
 
 class R2Score(Metric):
@@ -96,9 +96,6 @@ class R2Score(Metric):
         Returns:
             float: calculated R-squared score
         """
-        ground_truth = np.array(ground_truth)
-        prediction = np.array(prediction)
-
         regression_soq = np.sum((ground_truth - prediction) ** 2)
         total_soq = np.sum((ground_truth - np.mean(ground_truth)) ** 2)
         return 1 - (regression_soq / total_soq)
@@ -119,7 +116,7 @@ class AccuracyMetric(Metric):
         Returns:
             float: calculated accuracy score
         """
-        return np.mean(np.array(ground_truth) == np.array(prediction))
+        return np.mean(ground_truth == prediction)
 
 
 class PrecisionMetric(Metric):
@@ -174,8 +171,6 @@ class F1Score(Metric):
         Returns:
             float: calculated F1 score
         """
-        ground_truth = np.array(ground_truth)
-        prediction = np.array(prediction)
         precision = PrecisionMetric()(ground_truth, prediction)
         recall = RecallMetric()(ground_truth, prediction)
         return (2 * (precision * recall)) / (precision + recall)
