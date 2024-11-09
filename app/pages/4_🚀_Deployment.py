@@ -1,141 +1,25 @@
-import pickle
-
-import numpy as np
 import pandas as pd
 import streamlit as st
 
 from app.core.system import AutoMLSystem
+from app.core.utility import show_pipeline_summary, write_helper_text
+from app.core.modelling import choose_input_features
+from app.core.pipeline import load_pipeline, run_pipeline_prediction
 from autoop.core.ml.dataset import Dataset
-from autoop.core.ml.feature import Feature
-from autoop.core.ml.pipeline import Pipeline
-from autoop.functional.feature import detect_feature_types
-from autoop.functional.preprocessing import preprocess_features
 
 st.set_page_config(page_title="Deployment", page_icon="🚀")
 
 automl = AutoMLSystem.get_instance()
 pipelines = automl.registry.list(type="pipeline")
 
-
-def write_helper_text(text: str) -> None:
-    """Function to write helper text in a specific format."""
-    st.write(f"<p style=\"color: #888;\">{text}</p>", unsafe_allow_html=True)
-
-
 st.write("# 🚀 Deployment")
 write_helper_text("In this section, you can deploy pre-existing pipelines.")
-
-
-def load_pipeline() -> None:
-    """Function to load a pipeline from the registry."""
-    pipeline_artifact = st.selectbox(
-        "Please choose the pipeline you want to use:",
-        options=pipelines,
-        format_func=lambda pipeline: f"{pipeline.name} - {pipeline.version}"
-    )
-
-    if pipeline_artifact:
-        current_pipeline = pickle.loads(pipeline_artifact.read())
-        st.session_state.pipeline = current_pipeline
-
-
-def choose_input_features(dataset: Dataset) -> list[Feature]:
-    """Function to choose input features from a dataset.
-
-    Arguments:
-        dataset (Dataset): dataset to choose features from.
-
-    Returns:
-        list of chosen feature(s).
-    """
-    dataset_features = detect_feature_types(dataset)
-
-    feature_names = [feature.name for feature in dataset_features]
-    feature_name = st.multiselect(
-        "Please choose your input features:",
-        options=feature_names,
-        format_func=lambda feature_name: f"{feature_name}"
-    )
-
-    if not feature_name:
-        return []
-
-    st.write(f"You chose the following input features: {feature_name}")
-
-    return [feature for feature in dataset_features
-            if feature.name in feature_name]
-
-
-def show_pipeline_summary(pipeline: Pipeline) -> None:
-    """Shows a neat summary of the pipeline.
-
-    Arguments:
-        pipeline (Pipeline): pipeline used in the summary.
-    """
-    st.markdown("### Selected dataset:")
-    st.markdown(f"**Name**: {pipeline.dataset.name}")
-    st.markdown(f"**Version**: {pipeline.dataset.version}")
-    if st.button(label="View"):
-        st.dataframe(pipeline.dataset.read_as_data_frame())
-
-    st.markdown("### Selected features:")
-    input_column, target_column = st.columns(2)
-    with input_column:
-        st.subheader("Input features:")
-        for feature in pipeline.input_features:
-            st.markdown(f"**{feature.name}** (type: {feature.type})")
-    with target_column:
-        st.subheader("Target feature:")
-        st.markdown(f"**{pipeline.target_feature.name}** "
-                    f"(type: {pipeline.target_feature.type})")
-
-    st.markdown("### Selected model:")
-    st.markdown(f"**Name**: {pipeline.model.__class__.__name__}")
-    st.markdown(f"**Type**: {pipeline.model.type.capitalize()}")
-    st.markdown("### Model Hyperparameters:")
-
-    items = pipeline.model.hyperparameters.items()
-    hp_columns = st.columns(len(items))
-    for index, (hyper_param, value) in enumerate(items):
-        with hp_columns[index]:
-            st.metric(f"**{hyper_param}**", value)
-
-    st.markdown("### Model Metrics:")
-    metric_columns = st.columns(len(pipeline.metrics))
-    for index, metric in enumerate(pipeline.metrics):
-        with metric_columns[index]:
-            st.metric(label=f"{metric}",
-                      value=None)
-
-    st.markdown("### Data split:")
-    st.markdown(f"Data split used during training: {pipeline.split}")
-
-
-def run_pipeline_prediction(pipeline: Pipeline,
-                            dataset: Dataset,
-                            features: list[Feature]) -> np.ndarray:
-    """Function to run predictions using the selected pipeline.
-
-    Arguments:
-        pipeline (Pipeline): the pipeline to use for predictions.
-        dataset (Dataset): the dataset to use for predictions.
-        features (list[Feature]): feature(s) to use for predictions.
-
-    Returns:
-        the predictions as an np.ndarray.
-    """
-    input_results = preprocess_features(features, dataset)
-    input_vectors = (
-        [data for (feature_name, data, artifact) in input_results]
-    )
-    X = np.concatenate(input_vectors, axis=1)
-    return pipeline.model.predict(X)
 
 
 if __name__ == "__main__":
     st.session_state.data = None
     st.session_state.pipeline = None
-    load_pipeline()
+    load_pipeline(pipelines)
     summary_tab, load_tab = st.tabs(["Summary", "Load"])
 
     current_pipeline = st.session_state.pipeline
