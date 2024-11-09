@@ -18,6 +18,11 @@ class Feature():
         self.type = type
 
     def __eq__(self, other: 'Feature') -> bool:
+        """Checks whether self and other are the same feature.
+
+        Arguments:
+            other (Feature): other feature that should be checked
+                             against self."""
         if not isinstance(other, Feature):
             return False
         return self.name == other.name and self.type == other.type
