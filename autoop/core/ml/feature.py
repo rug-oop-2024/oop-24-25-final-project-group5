@@ -17,6 +17,11 @@ class Feature():
         self.name = name
         self.type = type
 
+    def __eq__(self, other: 'Feature') -> bool:
+        if not isinstance(other, Feature):
+            return False
+        return self.name == other.name and self.type == other.type
+
     def __str__(self) -> str:
         """Returns a formatted string representing the feature."""
         return f"Feature with name {self.name} and type {self.type}"

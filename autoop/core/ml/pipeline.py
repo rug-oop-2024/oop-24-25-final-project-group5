@@ -1,6 +1,7 @@
 import pickle
 
 import numpy as np
+from copy import deepcopy
 
 from autoop.core.ml.artifact import Artifact
 from autoop.core.ml.dataset import Dataset
@@ -49,6 +50,11 @@ Pipeline(
     metrics={list(map(str, self._metrics))},
 )
 """
+
+    @property
+    def input_features(self) -> list[Feature]:
+        """Returns a deepcopy of the list of input features."""
+        return deepcopy(self._input_features)
 
     @property
     def model(self) -> Model:

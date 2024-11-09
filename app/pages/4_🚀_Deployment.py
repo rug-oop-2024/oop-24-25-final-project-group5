@@ -37,14 +37,10 @@ def load_pipeline() -> None:
     if pipeline_artifact:
         current_pipeline = pickle.loads(pipeline_artifact.read())
         st.session_state.pipeline = current_pipeline
-        print(current_pipeline)
-        print(current_pipeline.model.parameters)
-        print("artifacts", current_pipeline.artifacts)
 
 
 def choose_input_features(dataset: Dataset) -> list[Feature]:
-    """
-    Function to choose input features from a dataset.
+    """Function to choose input features from a dataset.
 
     Arguments:
         dataset (Dataset): dataset to choose features from.
@@ -62,7 +58,7 @@ def choose_input_features(dataset: Dataset) -> list[Feature]:
     )
 
     if not feature_name:
-        return None
+        return []
 
     st.write(f"You chose the following input features: {feature_name}")
 
@@ -92,36 +88,60 @@ def run_pipeline_prediction(pipeline: Pipeline,
     return pipeline.model.predict(X)
 
 
-load_pipeline()
-summary_tab, load_tab = st.tabs(["Summary", "Load"])
-st.session_state.data = None
+if __name__ == "__main__":
+    st.session_state.data = None
+    st.session_state.pipeline = None
+    load_pipeline()
+    summary_tab, load_tab = st.tabs(["Summary", "Load"])
 
-current_pipeline = st.session_state.pipeline
-if current_pipeline:
-    with summary_tab:
-        st.write("### Pipeline Summary")
-        st.write(current_pipeline)
+    current_pipeline = st.session_state.pipeline
+    if current_pipeline:
+        with summary_tab:
+            st.write("### Pipeline Summary")
+            st.write(current_pipeline)
 
-    with load_tab:
-        st.write("### Upload .csv for prediction")
-        csv_label = "Please provide a .csv to perform predictions."
-        csv_data = st.file_uploader(label=csv_label,
-                                    type='csv')
-        if csv_data is not None:
-            st.session_state.data = csv_data
+        with load_tab:
+            st.write("### Upload csv file for prediction")
+            csv_label = "Please provide a .csv to perform predictions."
+            csv_data = st.file_uploader(label=csv_label,
+                                        type='csv')
 
-        if st.session_state.data is not None:
-            df = pd.read_csv(csv_data)
-            # turn df into Dataset for convenience
-            dataset = Dataset.from_dataframe(
-                name=csv_data.name.split('.')[0],
-                asset_path=csv_data.name,
-                data=df
-            )
-            st.dataframe(dataset.read_as_data_frame())
-            input_features = choose_input_features(dataset)
-            if st.button("Run predictions"):
-                predictions = run_pipeline_prediction(
-                    current_pipeline, dataset, input_features
+            if csv_data is not None:
+                st.session_state.data = csv_data
+
+            if st.session_state.data is not None:
+                df = pd.read_csv(csv_data)
+                # turn df into Dataset for convenience
+                dataset = Dataset.from_dataframe(
+                    name=csv_data.name.split('.')[0],
+                    asset_path=csv_data.name,
+                    data=df
                 )
-                st.write(predictions)
+                st.dataframe(dataset.read_as_data_frame())
+                input_features = choose_input_features(dataset)
+                if len(input_features) != len(current_pipeline.input_features):
+                    st.warning("The length of the selected input features is "
+                               "not the same as the length of the pipeline's "
+                               "input features. Please select "
+                               f"{len(current_pipeline.input_features)} "
+                               "input features.")
+                if input_features != current_pipeline.input_features:
+                    st.warning("The selected input features are not the same. "
+                               "Running the predictions with these input "
+                               "features will cause the predictions to be off."
+                               "\n\n"
+                               "Please consider using the same input features "
+                               "as those used in the pipeline: "
+                               f"{[feature.name for feature
+                                   in current_pipeline.input_features]}")
+                if st.button("Run predictions"):
+                    try:
+                        predictions = run_pipeline_prediction(
+                            current_pipeline, dataset, input_features
+                        )
+                        st.write(predictions)
+                    except ValueError as e:
+                        st.error("Predicting with current input features "
+                                 "failed. Please check if you have the "
+                                 "same amount of input features selected. "
+                                 f"\n\n Error message: {e}")
