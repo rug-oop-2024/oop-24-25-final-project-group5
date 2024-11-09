@@ -233,6 +233,51 @@ def choose_data_split() -> float:
     return data_split
 
 
+def show_pipeline_summary(pipeline: Pipeline) -> None:
+    """Shows a neat summary of the pipeline.
+
+    Arguments:
+        pipeline (Pipeline): pipeline used in the summary.
+    """
+    st.markdown("### Selected dataset:")
+    st.markdown(f"**Name**: {pipeline.dataset.name}")
+    st.markdown(f"**Version**: {pipeline.dataset.version}")
+    if st.button(label="View"):
+        st.dataframe(pipeline.dataset.read_as_data_frame())
+
+    st.markdown("### Selected features:")
+    input_column, target_column = st.columns(2)
+    with input_column:
+        st.subheader("Input features:")
+        for feature in pipeline.input_features:
+            st.markdown(f"**{feature.name}** (type: {feature.type})")
+    with target_column:
+        st.subheader("Target feature:")
+        st.markdown(f"**{pipeline.target_feature.name}** "
+                    f"(type: {pipeline.target_feature.type})")
+
+    st.markdown("### Selected model:")
+    st.markdown(f"**Name**: {pipeline.model.__class__.__name__}")
+    st.markdown(f"**Type**: {pipeline.model.type.capitalize()}")
+    st.markdown("### Model Hyperparameters:")
+
+    items = pipeline.model.hyperparameters.items()
+    hp_columns = st.columns(len(items))
+    for index, (hyper_param, value) in enumerate(items):
+        with hp_columns[index]:
+            st.metric(f"**{hyper_param}**", value)
+
+    st.markdown("### Model Metrics:")
+    metric_columns = st.columns(len(pipeline.metrics))
+    for index, metric in enumerate(pipeline.metrics):
+        with metric_columns[index]:
+            st.metric(label=f"{metric}",
+                      value=None)
+
+    st.markdown("### Data split:")
+    st.markdown(f"Data split used during training: {pipeline.split}")
+
+
 if __name__ == "__main__":
     # quick workaround :P
     modelling_pipeline = None
@@ -257,41 +302,7 @@ if __name__ == "__main__":
     st.divider()
     st.subheader("Pipeline Overview")
     if modelling_pipeline:
-        st.markdown("### Selected dataset:")
-        st.markdown(f"**Name**: {dataset.name}")
-        st.markdown(f"**Version**: {dataset.version}")
-        if st.button(label="View"):
-            st.dataframe(dataset.read_as_data_frame())
-
-        st.markdown("### Selected features:")
-        input_column, target_column = st.columns(2)
-        with input_column:
-            st.subheader("Input features:")
-            for feature in input_features:
-                st.markdown(f"**{feature.name}** (type: {feature.type})")
-        with target_column:
-            st.subheader("Target feature:")
-            st.markdown(f"**{target_feature.name}** "
-                        f"(type: {target_feature.type})")
-
-        st.markdown("### Selected model:")
-        st.markdown(f"**Name**: {modelling_pipeline.model.__class__.__name__}")
-        st.markdown(f"**Type**: {modelling_pipeline.model.type.capitalize()}")
-        st.markdown("### Model Hyperparameters:")
-
-        items = modelling_pipeline.model.hyperparameters.items()
-        hp_columns = st.columns(len(items))
-        for index, (hyper_param, value) in enumerate(items):
-            with hp_columns[index]:
-                st.metric(f"**{hyper_param}**", value)
-
-        st.markdown("### Model Metrics:")
-        metric_columns = st.columns(len(metric_names))
-        for index, metric in enumerate(metric_names):
-            with metric_columns[index]:
-                st.metric(label=f"{metric.replace('_', ' ').capitalize()}",
-                          value=None)
-
+        show_pipeline_summary(modelling_pipeline)
     else:
         st.write("Please create the modelling pipeline first.")
 
@@ -299,7 +310,7 @@ if __name__ == "__main__":
     if modelling_pipeline:
         artifact_name = st.text_input("Enter pipeline name",
                                       max_chars=20,
-                                      placeholder="cool_pipeline!")
+                                      placeholder="cool_pipeline")
         artifact_version = st.text_input("Enter pipeline version",
                                          max_chars=10,
                                          placeholder="1.0.0")
@@ -307,7 +318,7 @@ if __name__ == "__main__":
         train_button = st.button("Train and Save")
         if train_button:
             results = modelling_pipeline.execute()
-            st.success("Succesfully trained and saved the pipeline!"
+            st.success("Succesfully trained and saved the pipeline! \n"
                        "Please look beneath for the pipeline's results.")
 
             # Place in session state
@@ -326,7 +337,6 @@ if __name__ == "__main__":
 
             # Show results of metrics
             st.write("### Metrics Results")
-            print(results)
             metrics_df = pd.DataFrame(results["metrics"])
 
             # Modify first column with names

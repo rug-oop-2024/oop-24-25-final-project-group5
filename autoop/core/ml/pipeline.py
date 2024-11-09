@@ -52,14 +52,34 @@ Pipeline(
 """
 
     @property
-    def input_features(self) -> list[Feature]:
-        """Returns a deepcopy of the list of input features."""
-        return deepcopy(self._input_features)
+    def dataset(self) -> Dataset:
+        """Returns the pipeline's dataset."""
+        return self._dataset
 
     @property
     def model(self) -> Model:
         """Returns the model used in the pipeline."""
         return self._model
+
+    @property
+    def input_features(self) -> list[Feature]:
+        """Returns a deepcopy of the list of input features."""
+        return deepcopy(self._input_features)
+
+    @property
+    def target_feature(self) -> Feature:
+        """Returns the pipeline's target feature."""
+        return self._target_feature
+
+    @property
+    def metrics(self) -> list[Metric]:
+        """Returns a deepcopy of the list of metrics."""
+        return deepcopy(self._metrics)
+
+    @property
+    def split(self) -> float:
+        """Returns the float of the pipeline's data split."""
+        return self._split
 
     @property
     def artifacts(self) -> list[Artifact]:

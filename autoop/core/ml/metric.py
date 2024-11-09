@@ -34,17 +34,14 @@ class Metric(ABC):
         """
         pass
 
+    @abstractmethod
+    def __str__(self) -> str:
+        """Abstract method for printing the metric's name.
 
-def get_metric(name: str) -> Metric:
-    """
-    Returns the metric object based
-    on the name provided.
-    Args:
-        name: name of the metric
-
-    Returns: metric object
-    """
-    return METRICS_MAP[name]
+        Returns:
+            str: formatted metric name.
+        """
+        pass
 
 
 # Regression Metrics
@@ -64,6 +61,14 @@ class MeanSquaredError(Metric):
         """
         return np.mean((ground_truth - prediction) ** 2)
 
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "Mean Squared Error"
+
 
 class MeanAbsoluteError(Metric):
     """Mean Absolute Error metric."""
@@ -80,6 +85,14 @@ class MeanAbsoluteError(Metric):
             float: calculated mean absolute error
         """
         return np.mean(np.abs(ground_truth - prediction))
+
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "Mean Absolute Error"
 
 
 class R2Score(Metric):
@@ -100,6 +113,14 @@ class R2Score(Metric):
         total_soq = np.sum((ground_truth - np.mean(ground_truth)) ** 2)
         return 1 - (regression_soq / total_soq)
 
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "R2 Score"
+
 
 # Classification Metrics
 class AccuracyMetric(Metric):
@@ -117,6 +138,14 @@ class AccuracyMetric(Metric):
             float: calculated accuracy score
         """
         return np.mean(ground_truth == prediction)
+
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "Accuracy"
 
 
 class PrecisionMetric(Metric):
@@ -137,6 +166,14 @@ class PrecisionMetric(Metric):
         false_positive = np.sum((ground_truth == 0) & (prediction == 1))
         return true_positive / (true_positive + false_positive)
 
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "Precision"
+
 
 class RecallMetric(Metric):
     """Calculates metric score based on average."""
@@ -156,6 +193,14 @@ class RecallMetric(Metric):
         false_negative = np.sum((ground_truth == 1) & (prediction == 0))
         return true_positive / (true_positive + false_negative)
 
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "Recall"
+
 
 class F1Score(Metric):
     """Calculates metric score based on average."""
@@ -174,6 +219,26 @@ class F1Score(Metric):
         precision = PrecisionMetric()(ground_truth, prediction)
         recall = RecallMetric()(ground_truth, prediction)
         return (2 * (precision * recall)) / (precision + recall)
+
+    def __str__(self) -> str:
+        """Method for printing the metric's name.
+
+        Returns:
+            str: formatted metric name.
+        """
+        return "F1 Score"
+
+
+def get_metric(name: str) -> Metric:
+    """
+    Returns the metric object based
+    on the name provided.
+    Args:
+        name: name of the metric
+
+    Returns: metric object
+    """
+    return METRICS_MAP[name]
 
 
 METRICS_MAP = {
