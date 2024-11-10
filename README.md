@@ -99,7 +99,7 @@ Some examples include housing prices, second-hand cars, etc.
 - [x] I have filled my personal rubric.
 - [x] The code is refactored to style standards.
 - [x] I have passed my tests.
-- [ ] I have documented my code and decisions.
+- [x] I have documented my code and decisions.
 
 # Grading & Submission (IMPORTANT)
 
