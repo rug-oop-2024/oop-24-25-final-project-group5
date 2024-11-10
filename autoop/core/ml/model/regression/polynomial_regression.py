@@ -20,7 +20,7 @@ class PolynomialRegression(Model):
         super().__init__()
         self.hyperparameters = {"degree": degree}
         self.hyperparameter_descriptions = {
-            "degree": "Maximal degree of polynomial features"
+            "degree": "Maximal degree of polynomial features."
         }
         self.type = "regression"
 

@@ -22,7 +22,7 @@ class KNearestNeighborsClassification(Model):
         self.hyperparameters = {"k": k}
 
         self.hyperparameter_descriptions = {
-            "k": "Number of neighbors to consider for classification"
+            "k": "Number of neighbors to consider for classification."
         }
 
     def fit(self, observations: np.ndarray, ground_truth: np.ndarray) -> None:

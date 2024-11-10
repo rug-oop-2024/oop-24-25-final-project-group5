@@ -79,7 +79,7 @@ def choose_model(feature_type: str) -> Model:
     try:
         model_instance = model_type(**hyper_params)
     except ValueError as e:
-        st.write(f"### Error trying to create the model: {e}")
+        st.error(f"Error trying to create the model: {e}")
     return model_instance
 
 
