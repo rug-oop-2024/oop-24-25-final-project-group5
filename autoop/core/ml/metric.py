@@ -1,9 +1,15 @@
 from abc import ABC, abstractmethod
+from typing import Literal
 import numpy as np
 
 
 class Metric(ABC):
     """Base class for all metrics."""
+
+    def __init__(self, type: Literal["classification", "regression"]) -> None:
+        """Main constructor for metrics.
+        Keeps track of which type of metric it is."""
+        self._type = type
 
     def __call__(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> any:
@@ -43,10 +49,23 @@ class Metric(ABC):
         """
         pass
 
+    @property
+    def type(self) -> Literal["regression", "classification"]:
+        """Returns the type of metric this is
+
+        Returns:
+            type: classification or regression
+        """
+        return self._type
+
 
 # Regression Metrics
 class MeanSquaredError(Metric):
     """Mean Squared Error metric."""
+
+    def __init__(self) -> None:
+        """Constructor for MeanSquaredError"""
+        super().__init__("regression")
 
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
@@ -73,6 +92,10 @@ class MeanSquaredError(Metric):
 class MeanAbsoluteError(Metric):
     """Mean Absolute Error metric."""
 
+    def __init__(self) -> None:
+        """Constructor for MeanAbsoluteError"""
+        super().__init__("regression")
+
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
         """Evaluate method for the mean absoulte error metric.
@@ -97,6 +120,10 @@ class MeanAbsoluteError(Metric):
 
 class R2Score(Metric):
     """R-squared (R^2) score."""
+
+    def __init__(self) -> None:
+        """Constructor for R2Score"""
+        super().__init__("regression")
 
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
@@ -126,6 +153,10 @@ class R2Score(Metric):
 class AccuracyMetric(Metric):
     """Calculates accuracy score."""
 
+    def __init__(self) -> None:
+        """Constructor for AccuracyMetric"""
+        super().__init__("classification")
+
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
         """Evaluate method for the accuracy score metric.
@@ -150,6 +181,10 @@ class AccuracyMetric(Metric):
 
 class PrecisionMetric(Metric):
     """Calculates precision score based on average."""
+
+    def __init__(self) -> None:
+        """Constructor for PrecisionMetric"""
+        super().__init__("classification")
 
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
@@ -178,6 +213,10 @@ class PrecisionMetric(Metric):
 class RecallMetric(Metric):
     """Calculates metric score based on average."""
 
+    def __init__(self) -> None:
+        """Constructor for RecallMetric"""
+        super().__init__("classification")
+
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
         """Evaluate method for the recall score metric.
@@ -204,6 +243,10 @@ class RecallMetric(Metric):
 
 class F1Score(Metric):
     """Calculates metric score based on average."""
+
+    def __init__(self) -> None:
+        """Constructor for F1Score"""
+        super().__init__("classification")
 
     def evaluate(self, ground_truth: np.ndarray,
                  prediction: np.ndarray) -> float:
