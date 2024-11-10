@@ -28,7 +28,7 @@ if __name__ == "__main__":
     modelling_pipeline = None
     dataset = choose_dataset(datasets)
     input_features = choose_input_features(dataset)
-    target_feature = choose_target_feature(dataset)
+    target_feature = choose_target_feature(dataset, input_features)
     if input_features and target_feature:
         model = choose_model(target_feature.type)
         metrics = choose_metrics(model.type)

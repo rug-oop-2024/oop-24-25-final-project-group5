@@ -24,9 +24,9 @@ class LassoRegression(Model):
         """
         if alpha < 0:
             raise ValueError("Alpha must be in range [0.0, inf).")
-        if max_iter < 1 and max_iter != -1:
+        if max_iter < 1:
             raise ValueError("Max number of iterations must be "
-                             "in range [1, inf) or -1 for no max limit.")
+                             "in range [1, inf).")
         if tol < 0:
             raise ValueError("Tol must be a float in range "
                              "[0.0, inf).")
@@ -54,7 +54,7 @@ class LassoRegression(Model):
 
         self._lasso_model = Lasso(
             alpha=alpha,
-            max_iter=max_iter if max_iter != -1 else None,
+            max_iter=max_iter,
             tol=tol,
             selection=selection
         )

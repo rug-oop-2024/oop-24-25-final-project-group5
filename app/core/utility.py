@@ -35,12 +35,12 @@ def show_pipeline_summary(pipeline: Pipeline) -> None:
     st.markdown(f"**Name**: {pipeline.model.__class__.__name__}")
     st.markdown(f"**Type**: {pipeline.model.type.capitalize()}")
     st.markdown("### Model Hyperparameters:")
-
-    items = pipeline.model.hyperparameters.items()
-    hp_columns = st.columns(len(items))
-    for index, (hyper_param, value) in enumerate(items):
-        with hp_columns[index]:
-            st.metric(f"**{hyper_param}**", value)
+    if len(pipeline.model.hyperparameters) != 0:
+        items = pipeline.model.hyperparameters.items()
+        hp_columns = st.columns(len(items))
+        for index, (hyper_param, value) in enumerate(items):
+            with hp_columns[index]:
+                st.metric(f"**{hyper_param}**", value)
 
     st.markdown("### Model Metrics:")
     metric_columns = st.columns(len(pipeline.metrics))

@@ -141,7 +141,8 @@ def choose_input_features(dataset: Dataset) -> list[Feature]:
             if feature.name in feature_name]
 
 
-def choose_target_feature(dataset: Dataset) -> Feature:
+def choose_target_feature(dataset: Dataset,
+                          input_features: list[Feature]) -> Feature:
     """
     Function to choose the target feature from a dataset.
 
@@ -152,8 +153,11 @@ def choose_target_feature(dataset: Dataset) -> Feature:
         chosen target feature.
     """
     dataset_features = detect_feature_types(dataset)
-
-    feature_names = [feature.name for feature in dataset_features]
+    input_feature_names = [input_feature.name
+                           for input_feature in input_features]
+    feature_names = [feature.name
+                     for feature in dataset_features
+                     if feature.name not in input_feature_names]
     feature_name = st.selectbox(
         "Please choose your target feature:",
         options=feature_names,
