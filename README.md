@@ -32,16 +32,16 @@ We encourage you to learn from the best practices and design patterns (e.g., htt
 ### User stories
 In an industry setting, you will be given user stories or requirements that need to be translated to functional requirements by you. Luckily, you will not have to do this but we left it for inspiraton.
 
-x1. OOP-001: As a datascientist, I want to be able to upload a CSV file so that I can begin my ML workflow.
-x2. OOP-002: As a datascientist, I want to be able to choose the target column so that I can achieve a certain task.
-x3. OOP-003: As a datascientist, I want to make slices on my dataset based on some criteria (e.g., age > 18, 80% split, etc.) so that I can train a model on a subset of the data.
-x4. OOP-004: As a datascientist, I want to be able to choose the type of model I want to train (e.g., classification, regression, etc.) so that I can achieve a certain task.
-x5. OOP-005: As a datascientist, I would like to start training and get results of different metrics.
+1. OOP-001: As a datascientist, I want to be able to upload a CSV file so that I can begin my ML workflow.
+2. OOP-002: As a datascientist, I want to be able to choose the target column so that I can achieve a certain task.
+3. OOP-003: As a datascientist, I want to make slices on my dataset based on some criteria (e.g., age > 18, 80% split, etc.) so that I can train a model on a subset of the data.
+4. OOP-004: As a datascientist, I want to be able to choose the type of model I want to train (e.g., classification, regression, etc.) so that I can achieve a certain task.
+5. OOP-005: As a datascientist, I would like to start training and get results of different metrics.
 6. OOP-006: As a datascientist, I would like to be able to download the model so that I can use it in production.
-x7. OOP-007: As a datascientist, I would like to create dataset artifacts from CSV files with respective names so that I can use it to train on them later.
-x8. OOP-008: As a datascientist, I would like to create predictions on a specific model to analyse the results.
-x9. OOP-009: As a datascientist, I would like to be able to download the predictions as a CSV file.
-x10. OOP-010: As a datascientist, I would like to view my predictions.
+7. OOP-007: As a datascientist, I would like to create dataset artifacts from CSV files with respective names so that I can use it to train on them later.
+8. OOP-008: As a datascientist, I would like to create predictions on a specific model to analyse the results.
+9. OOP-009: As a datascientist, I would like to be able to download the predictions as a CSV file.
+10. OOP-010: As a datascientist, I would like to view my predictions.
 11. OOP-011: As a datascientist, I would like to create a model run where I can fine-tune an existing model on a new dataset.
 
 More detailed instructions are provided in `INSTRUCTIONS.md` to guide you through these user stories.
@@ -95,10 +95,10 @@ E.g. docs/decisions/DSC-0001-use-typescript.md
 Some examples include housing prices, second-hand cars, etc.
 
 ### Checklist
-- [ ] I have read the instructions carefully.
-- [ ] I have filled my personal rubric.
-- [ ] The code is refactored to style standards.
-- [ ] I have passed my tests.
+- [x] I have read the instructions carefully.
+- [x] I have filled my personal rubric.
+- [x] The code is refactored to style standards.
+- [x] I have passed my tests.
 - [ ] I have documented my code and decisions.
 
 # Grading & Submission (IMPORTANT)
