@@ -71,5 +71,6 @@ if __name__ == "__main__":
                     except ValueError as e:
                         st.error("Predicting with current input features "
                                  "failed. Please check if you have the "
-                                 "same amount of input features selected. "
+                                 "same amount of input features as the "
+                                 "pipeline selected. "
                                  f"\n\n Error message: {e}")
