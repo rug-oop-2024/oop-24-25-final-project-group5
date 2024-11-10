@@ -171,7 +171,7 @@ class AutoMLSystem:
     def registry(self) -> ArtifactRegistry:
         """
         Provides access to the artifact registry.
-
+metri
         Returns:
             ArtifactRegistry: The artifact registry instance.
         """
