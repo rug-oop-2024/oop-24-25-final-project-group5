@@ -1,28 +1,62 @@
-from autoop.core.ml.artifact import Artifact
-from abc import ABC, abstractmethod
-import pandas as pd
 import io
 
-class Dataset(Artifact):
+import pandas as pd
 
-    def __init__(self, *args, **kwargs):
+from autoop.core.ml.artifact import Artifact
+
+
+class Dataset(Artifact):
+    """Dataset class to store the data frame."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Initialize the dataset object."""
         super().__init__(type="dataset", *args, **kwargs)
 
     @staticmethod
-    def from_dataframe(data: pd.DataFrame, name: str, asset_path: str, version: str="1.0.0"):
+    def from_dataframe(
+            data: pd.DataFrame,
+            name: str,
+            asset_path: str,
+            version: str = "1.0.0"
+    ) -> 'Dataset':
+        """Create a dataset from a data frame.
+
+        Arguments:
+            data (pd.DataFrame): data frame to be saved.
+            name (str): name of the dataset.
+            asset_path (str): path to save the dataset.
+            version (str): version of the dataset.
+
+        Returns:
+            The dataset object.
+        """
         return Dataset(
             name=name,
             asset_path=asset_path,
             data=data.to_csv(index=False).encode(),
             version=version,
         )
-        
-    def read(self) -> pd.DataFrame:
+
+    def read_as_data_frame(self) -> pd.DataFrame:
+        """
+        Read the data frame from the dataset.
+
+        Returns:
+            The data frame as pd.DataFrame.
+        """
         bytes = super().read()
         csv = bytes.decode()
         return pd.read_csv(io.StringIO(csv))
-    
+
     def save(self, data: pd.DataFrame) -> bytes:
+        """
+        Save the data frame as a csv file.
+
+        Arguments:
+            data (pd.DataFrame): data frame to be saved.
+
+        Returns:
+            The bytes of the saved data frame.
+        """
         bytes = data.to_csv(index=False).encode()
         return super().save(bytes)
-    

@@ -51,37 +51,37 @@ We take some assumptions to simplify this task:
 The base structure of the assignment is as follows:
 ```
 .
-├── INSTRUCTIONS.md
-├── README.md
-├── app # This is the streamlit app
-│   ├── Welcome.py
-│   ├── core # streamlit app logic
-│   │   └── system.py
-│   └── pages
+|-- INSTRUCTIONS.md
+|-- README.md
+|-- app # This is the streamlit app
+|   |-- Welcome.py
+|   |-- core # streamlit app logic
+|   |   |-- system.py
+|   |-- pages
         ...
-├── assets # Storage to save your examples
-├── autoop # You python library for AutoML
-│   ├── core # core logic of automl
-│   │   ├── database.py
-│   │   ├── ml
-│   │   │   ├── artifact.py
-│   │   │   ├── dataset.py
-│   │   │   ├── feature.py
-│   │   │   ├── metric.py
-│   │   │   ├── model
-│   │   │   │   ├── __init__.py
-│   │   │   │   ├── classification
-│   │   │   │   ├── model.py
-│   │   │   │   └── regression
-│   │   │   └── pipeline.py
-│   │   └── storage.py
-│   ├── functional # automl functions
-│   │   ├── feature.py
-│   │   └── preprocessing.py
-│   └── tests # Test you modules
-│       ├── main.py
+|-- assets # Storage to save your examples
+|-- autoop # You python library for AutoML
+|   |-- core # core logic of automl
+|   |   |-- database.py
+|   |   |-- ml
+|   |   |   |-- artifact.py
+|   |   |   |-- dataset.py
+|   |   |   |-- feature.py
+|   |   |   |-- metric.py
+|   |   |   |-- model
+|   |   |   |   |-- __init__.py
+|   |   |   |   |-- classification
+|   |   |   |   |-- model.py
+|   |   |   |   |-- regression
+|   |   |   |-- pipeline.py
+|   |   |-- storage.py
+|   |-- functional # automl functions
+|   |   |-- feature.py
+|   |   |-- preprocessing.py
+|   |-- tests # Test you modules
+|       |-- main.py
         ...
-└── requirements.txt
+|-- requirements.txt
 ```
 Make sure to update the `requirements.txt` regularly.
 ```
@@ -133,7 +133,7 @@ In this part you will integrate the library by importing your implemented classe
 - `ST/modelling/models`: Prompt the user to select a model based on the task type.
 - `ST/modelling/pipeline/split`: Prompt the user to select a dataset split.
 - `ST/modelling/pipeline/metrics`: Prompt the user to select a set of compatible metrics.
-- `ST/modelling/pipeline/summary`: Prompt the user with a beautifuly formatted pipeline summary with all the configurations.
+- `ST/modelling/pipeline/summary`: Prompt the user with a beautifully formatted pipeline summary with all the configurations.
 - `ST/modelling/pipeline/train`: Train the class and report the results of the pipeline.
 
 ## Extra requirements
