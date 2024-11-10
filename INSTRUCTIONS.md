@@ -133,7 +133,7 @@ In this part you will integrate the library by importing your implemented classe
 - `ST/modelling/models`: Prompt the user to select a model based on the task type.
 - `ST/modelling/pipeline/split`: Prompt the user to select a dataset split.
 - `ST/modelling/pipeline/metrics`: Prompt the user to select a set of compatible metrics.
-- `ST/modelling/pipeline/summary`: Prompt the user with a beautifuly formatted pipeline summary with all the configurations.
+- `ST/modelling/pipeline/summary`: Prompt the user with a beautifully formatted pipeline summary with all the configurations.
 - `ST/modelling/pipeline/train`: Train the class and report the results of the pipeline.
 
 ## Extra requirements
